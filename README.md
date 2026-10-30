@@ -11,6 +11,11 @@ an experiment or a retained reference.
 
 ## Use it
 
+Open [INZONE Profile Studio](https://rana.github.io/inzone-profile-studio/)
+in your browser. The public app needs no account or local installation. Share a
+palette link with someone who has the same supported keyboard; each person uses
+their own fresh Sony export when preparing an import.
+
 Choose a palette to relight the on-screen board. Inspect a key, share the selected
 look, or open the secondary comparison and draft tools. Previewing never writes
 the keyboard. A downloaded palette is a design file, not a Sony native import.
@@ -58,8 +63,9 @@ for development checks. The build supports a GitHub Pages project subdirectory.
 ## Durable source and public hosting
 
 Git retains the application, palette assignments, layout and checks. The workflow
-can build and publish `dist/` to GitHub Pages when the repository variable
-`ENABLE_GITHUB_PAGES` is `true` and Pages uses GitHub Actions.
+builds and publishes `dist/` to GitHub Pages on main after the checks pass. The
+repository is public, the repository variable `ENABLE_GITHUB_PAGES` is `true`,
+and Pages uses GitHub Actions. The local app remains available independently.
 
 Private native exports, local photographs, raw feedback and workstation recovery
 archives are deliberately outside this shareable repository. Backing up this repo

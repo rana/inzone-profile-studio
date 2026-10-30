@@ -11,7 +11,10 @@ any visitor's device state.
   and local draft tools, browser-local native preparation/readback verification.
 - Nine curated US81 palettes, with private source records kept outside Git.
 - CI checks public data, native adapter tests and production build.
-- Repository audience and deployment status are recorded in the delivery notes.
+- Rana chose a public project and GitHub Pages for sharing with a second keyboard
+  owner. The public app is https://rana.github.io/inzone-profile-studio/ and the
+  source is https://github.com/rana/inzone-profile-studio. Private native exports,
+  photographs and raw feedback remain outside this repository.
 
 ## Next priority
 
