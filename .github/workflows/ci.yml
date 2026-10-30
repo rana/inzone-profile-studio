@@ -28,7 +28,9 @@ jobs:
       - run: npm ci
       - run: python3 scripts/check_public_data.py
       - run: npm test
+      - run: npm run test:offline
       - run: npm run build
+      - run: python3 scripts/package_offline.py --output-dir .local/offline-ci
       - uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.ENABLE_GITHUB_PAGES == 'true'
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

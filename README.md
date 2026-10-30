@@ -75,6 +75,13 @@ for development checks. The build supports a GitHub Pages project subdirectory.
 
 ## Durable source and public hosting
 
+Keep the [offline ZIP](https://github.com/rana/inzone-profile-studio/releases/latest/download/inzone-profile-studio-offline.zip)
+and its [checksum](https://github.com/rana/inzone-profile-studio/releases/latest/download/inzone-profile-studio-offline.zip.sha256)
+somewhere separate from the workstation. The [recovery guide](docs/RECOVERY.md)
+explains verification, Node requirements and launch without npm or network.
+It includes the public collection; save your own variations as palette JSONs
+separately. Browser favorites, drafts and private native backups are not bundled.
+
 Git retains the application, palette assignments, layout and checks. The workflow
 builds and publishes `dist/` to GitHub Pages on main after the checks pass. The
 repository is public, the repository variable `ENABLE_GITHUB_PAGES` is `true`,
@@ -98,6 +105,13 @@ exports or transcripts. Keep palette hashes in `public/data/provenance.json` cur
 
 The hourly continuation should make bounded improvements guided by NEXT.md and
 real feedback. It must preserve the daily hardware settings during unattended work.
+
+To build a recovery release from reviewed, committed source (Node 22 and Python
+3.9+ available), run `npm run bundle:offline`. It rebuilds first and writes the
+ZIP and checksum to `.local/releases/vVERSION/`. A dirty checkout is refused;
+`--allow-dirty` on the Python packager is for local previews only. Packaging alone
+cannot prove that preexisting JavaScript was rebuilt, so use the wrapper for real
+releases. CI checks packaging and integrity scenarios as well as the app tests.
 
 Deployment references: [GitHub Pages custom workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
 and [Vite static deployment](https://vite.dev/guide/static-deploy.html#github-pages).

@@ -30,7 +30,11 @@ source-slot exports, private feedback and rollback history.
   and commit completed improvements. Respect the repository's recorded audience.
 - Maintain NEXT.md with one next useful task and clear evidence limits. Do not
   generate palette variations or call Claude merely to satisfy a schedule.
+- Build offline releases from clean reviewed commits with `npm run bundle:offline`.
+  Preserve published tags and assets; bump the version before another release.
+  The public recovery payload never includes private backups or browser state.
 
-Checks: `python3 scripts/check_public_data.py`, `npm test`, `npm run build`.
+Checks: `python3 scripts/check_public_data.py`, `npm test`, `npm run test:offline`,
+`npm run build`.
 Use the supported browser surface for UI testing. Do not work around a blocked
 local-file browser action or open unrelated user tabs.

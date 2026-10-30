@@ -8,6 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "test": "node --import tsx --test src/*.test.ts",
+    "test:offline": "python3 -m unittest discover -s scripts -p 'test_offline_package.py'",
+    "bundle:offline": "npm run build && python3 scripts/package_offline.py",
     "check": "tsc --noEmit",
     "start": "node scripts/serve.mjs"
   },
