@@ -336,7 +336,16 @@ async function start(): Promise<void> {
   compareId = currentMeta().parentId || catalog.profiles.find(profile => profile.id !== selectedId)!.id;
   byId('setup-caption').textContent = `${catalog.setupLabel || 'Example setup; not a connected device'}. Recorded ${catalog.verifiedAt || 'with the collection'}.`;
   for (const slot of catalog.slots || []) { const profile = catalog.profiles.find(item => item.id === slot.profileId); if (!profile) continue; const button = el('button', 'slot-example'); button.type = 'button'; button.append(el('span', 'slot-number', String(slot.slot)), el('span', '', profile.name)); button.addEventListener('click', () => selectProfile(profile.id)); byId('example-slots').append(button); }
-  resizeObserver = new ResizeObserver(renderBoards); resizeObserver.observe(byId('keyboard'));
+  let observedKeyboardWidth = -1;
+  let resizeFrame = 0;
+  resizeObserver = new ResizeObserver(entries => {
+    const width = Math.round(entries[0]!.contentRect.width);
+    if (width === observedKeyboardWidth) return;
+    observedKeyboardWidth = width;
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(renderBoards);
+  });
+  resizeObserver.observe(byId('keyboard'));
   render(); if (urlWarning) inform(urlWarning, true);
 }
 void start().catch(error => {
