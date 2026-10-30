@@ -1,5 +1,10 @@
 # Next useful work
 
+Read [foundations](docs/FOUNDATIONS.md) and the [research/open questions queue](docs/RESEARCH.md)
+before choosing work. Q-01 is the next autonomous implementation; Q-03 now has
+[three punctuation previews](docs/PUNCTUATION-STUDIES.md) prepared for a chosen
+physical trial. A preview is not an installed or accepted design.
+
 The first goal is a working, durable studio whose interactions match their labels.
 Preserve the accepted Amber Hinge + Rose design and the simpler Amber Hinge
 reference. The palette collection records physical-trial status separately from

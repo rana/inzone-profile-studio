@@ -1,6 +1,7 @@
 # INZONE Profile Studio
 
-Read README.md and NEXT.md, then inspect Git status before editing. This repository
+Read README.md, NEXT.md, docs/FOUNDATIONS.md and docs/RESEARCH.md, then inspect Git
+status before editing. This repository
 owns the shareable app and curated RGB designs. Each user owns their keyboard,
 source-slot exports, private feedback and rollback history.
 

@@ -9,6 +9,11 @@ and rose Shift keys. Plain Amber Hinge is the simpler accepted alternative.
 Each palette explains its main landmarks and whether it is an accepted look,
 an experiment or a retained reference.
 
+[Foundations and principles](docs/FOUNDATIONS.md) explain what we protect.
+[The research and open questions queue](docs/RESEARCH.md) gives the hourly
+continuation bounded goals. [Punctuation studies](docs/PUNCTUATION-STUDIES.md)
+offer three proposed variations to compare with the keeper.
+
 ## Use it
 
 Open [INZONE Profile Studio](https://rana.github.io/inzone-profile-studio/)
