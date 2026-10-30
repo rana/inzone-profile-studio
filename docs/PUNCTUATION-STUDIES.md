@@ -4,7 +4,7 @@ Three proposed variations of Amber Hinge + Rose. They change punctuation only; t
 
 | Preview | Changes | Intent |
 | --- | --- | --- |
-| [Pale Quote](https://rana.github.io/inzone-profile-studio/?profile=amber-hinge-rose&colors=QUOTE.C0FFFF) | 1 physical keys | One pale aqua quote key; every other green punctuation key stays green. |
+| [Pale Quote](https://rana.github.io/inzone-profile-studio/?profile=amber-hinge-rose&colors=QUOTE.C0FFFF) | 1 physical key | One pale aqua quote key; every other green punctuation key stays green. |
 | [Operator Ice](https://rana.github.io/inzone-profile-studio/?profile=amber-hinge-rose&colors=BACK_SLASH.FFFFFF%2CPLUS.FFFFFF%2CSLASH.FFFFFF%2CMINUS.FFFFFF) | 4 physical keys | Four white keys mark operators, paths and escapes. Comma, period, semicolon and quote stay green. |
 | [Three-Role Split](https://rana.github.io/inzone-profile-studio/?profile=amber-hinge-rose&colors=SEMICOLON.A0FF00%2CQUOTE.00FFFF%2CCOMMA.A0FF00%2CBACK_SLASH.FFFFFF%2CPLUS.FFFFFF%2CSLASH.FFFFFF%2CPERIOD.A0FF00%2CMINUS.FFFFFF) | 8 physical keys | White operator/path keys, a cyan quote and chartreuse separators; the most exploratory study. |
 
@@ -22,7 +22,7 @@ MINUS is the -/_ key, PLUS is the =/+ key, BACK_SLASH is the backslash/pipe key.
 
 ## Compare safely
 
-Open a preview link, then choose **Compare** and select the accepted Amber Hinge + Rose as the reference. The app labels these as local variations, never as newly accepted palettes. Reloading or sharing the URL reconstructs the exact RGB assignments. Opening a preview does not change a connected keyboard.
+Open a preview link, then choose **Compare**. An opened variation link defaults to its accepted **Amber Hinge + Rose (original)** reference. The app labels these as local variations, never as newly accepted palettes. Reloading or sharing the URL reconstructs the exact RGB assignments. Opening a preview does not change a connected keyboard.
 
 Screen RGB is not calibrated LED output. Pale aqua may look white; chartreuse may blend toward green or the warm function row. A real trial needs a chosen slot, its fresh source export, backup, official Sony import/Save, fresh export verification and the user's seated-distance feedback. Keep the accepted slot available for comparison.
 

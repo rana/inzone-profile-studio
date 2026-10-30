@@ -41,6 +41,11 @@ function asset(path: string): string { return new URL(path.replace(/^\/+/, ''), 
 function currentMeta(): CatalogProfile { return catalog.profiles.find(profile => profile.id === selectedId)!; }
 function currentBase(): Candidate { return palettes.get(selectedId)!; }
 function currentColors(): Record<string, string> { return drafts.get(selectedId) || currentBase().key_colors; }
+function defaultComparisonId(): string {
+  if (colorDifferences(currentBase().key_colors, currentColors()).length) return selectedId;
+  const meta = currentMeta();
+  return meta.parentId && palettes.has(meta.parentId) ? meta.parentId : catalog.profiles.find(profile => profile.id !== selectedId)!.id;
+}
 function nameOf(key: LayoutKey): string { return keyNames[key.id] || key.label; }
 function inform(message: string, error = false): void { const node = byId('notice'); node.textContent = message; node.classList.toggle('error', error); node.setAttribute('role', error ? 'alert' : 'status'); }
 function persist(): void {
@@ -62,7 +67,7 @@ function updateUrl(): void {
 function selectProfile(id: string): void {
   if (!palettes.has(id)) return;
   selectedId = id; selectedKey = 'SHIFT_L';
-  const meta = currentMeta(); compareId = meta.parentId && palettes.has(meta.parentId) ? meta.parentId : catalog.profiles.find(profile => profile.id !== id)!.id;
+  compareId = defaultComparisonId();
   updateUrl(); persist(); render(); inform('');
 }
 function renderCatalog(): void {
@@ -165,7 +170,10 @@ function render(): void {
   byId('compare-section').hidden = view !== 'compare'; byId('edit-section').hidden = view !== 'edit';
   for (const button of document.querySelectorAll<HTMLButtonElement>('[data-view]')) button.setAttribute('aria-pressed', String(button.dataset.view === view));
   const compare = byId<HTMLSelectElement>('compare-profile'); compare.replaceChildren();
-  for (const profile of catalog.profiles) if (profile.id !== selectedId) { const option = el('option', '', profile.name); option.value = profile.id; compare.append(option); }
+  for (const profile of catalog.profiles) {
+    const option = el('option', '', profile.name + (profile.id === selectedId ? ' (original)' : ''));
+    option.value = profile.id; compare.append(option);
+  }
   compare.value = compareId;
   renderInspector(); requestAnimationFrame(renderBoards);
 }
@@ -333,7 +341,7 @@ async function start(): Promise<void> {
   if (!urlWarning && new URL(location.href).searchParams.has('colors')) { try { drafts.set(selectedId, colorsFromUrl(location.href, currentBase().key_colors, layout)); } catch (error) { urlWarning = (error as Error).message; } }
   createShell(); wireEvents();
   const keySelect = byId<HTMLSelectElement>('key-select'); layout.forEach(key => { const option = el('option', '', nameOf(key)); option.value = key.id; keySelect.append(option); });
-  compareId = currentMeta().parentId || catalog.profiles.find(profile => profile.id !== selectedId)!.id;
+  compareId = defaultComparisonId();
   byId('setup-caption').textContent = `${catalog.setupLabel || 'Example setup; not a connected device'}. Recorded ${catalog.verifiedAt || 'with the collection'}.`;
   for (const slot of catalog.slots || []) { const profile = catalog.profiles.find(item => item.id === slot.profileId); if (!profile) continue; const button = el('button', 'slot-example'); button.type = 'button'; button.append(el('span', 'slot-number', String(slot.slot)), el('span', '', profile.name)); button.addEventListener('click', () => selectProfile(profile.id)); byId('example-slots').append(button); }
   let observedKeyboardWidth = -1;
