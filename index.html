@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <meta name="description" content="Explore, compare and prepare readable Sony INZONE keyboard color profiles. Your native exports stay in your browser.">
+    <title>INZONE Profile Studio</title>
+  </head>
+  <body>
+    <div id="app"><main class="loading"><h1>INZONE Profile Studio</h1><p>Loading the profile collection…</p></main></div>
+    <noscript>This studio needs JavaScript for its interactive preview and local file preparation.</noscript>
+    <script>
+      // Show useful instructions even when a local-file browser blocks module loading.
+      if (location.protocol === 'file:') {
+        const app = document.getElementById('app');
+        const main = document.createElement('main');
+        main.style.cssText = 'max-width:42rem;margin:3rem auto;padding:1.5rem;font-family:system-ui,sans-serif;line-height:1.6';
+        const title = document.createElement('h1'); title.textContent = 'Open the studio as an app';
+        const help = document.createElement('p'); help.textContent = 'This is the app’s source HTML. In the project folder, run npm ci, npm run build, then npm start.';
+        const open = document.createElement('a'); open.href = 'http://127.0.0.1:4173/'; open.textContent = 'Open the running local studio';
+        main.append(title, help, open); app.replaceChildren(main);
+      }
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

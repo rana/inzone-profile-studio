@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.local/
+.env
+.env.*
+!.env.example
+*.log
+__pycache__/
+*.pyc
+private-backups/
+raw-exports/
+*.native.json
+*.zip
+.DS_Store

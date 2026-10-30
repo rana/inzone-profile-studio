@@ -1,0 +1,65 @@
+[
+  {
+    "id": "amber-hinge-rose",
+    "source_palette_sha256": "6730b649cbfbc74a3215c7933a6cd283bf305a527c213d3058a9082b75f2bafc",
+    "published_palette_sha256": "9704fb5c753ed49e0dd3ccb27b38fdcbac3788f03e8b52e2eb06d3db8c38fa71",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "amber-hinge",
+    "source_palette_sha256": "acfe239198be3f33dda135cc7bb1967f41d2b444d446da57fe90fc46a90f6a72",
+    "published_palette_sha256": "3e470ed4f640e0fddd7aa1593470b385c17d853dfbb94cf45a661a3a1196d665",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "jade-exchange",
+    "source_palette_sha256": "1f60fddfac280d5f4b414c8d9ec13ba2a77671f91feb1a3dd2f7a27ab2b16743",
+    "published_palette_sha256": "711968ce0d2ed04d07b7cec3aa7b5fa264d1ec49d488320ab56beee2912d53e6",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "rose-shift",
+    "source_palette_sha256": "4693acec519f53b00ba29263214193e12390cd1067d232d98905250d0dc1f9ec",
+    "published_palette_sha256": "9dc2a0d979340654912fcfce6bdff18c3bde8ed1e03a2513c098a45a3e6ad8f0",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "moonlit-jade",
+    "source_palette_sha256": "961a11ed3605defd60a7ef29f6c92c48ad5cde459d53d497cdc38c976a78bfc1",
+    "published_palette_sha256": "1ad1cd5444e3694e8b4bd33d542fd3e5efb9d78d98f5dbf86845df50372a1f29",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "orchid-gates",
+    "source_palette_sha256": "88bacd48ac789542c95dc4ad2e35a38f539b1f76d3ed1e66851bd4bb2d4f8cf6",
+    "published_palette_sha256": "d5ade39f5f8ad629bd71703ab943a61e021abb8ad13f892e85998a3e9a44b390",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "paired-amber-contrast",
+    "source_palette_sha256": "1588dba9a496e94ce78e9d8eea0682eafb02acead42d7dbbededb7cf82e21701",
+    "published_palette_sha256": "3655d70bdec3ca477a88616535399c819552e70dcdab9e5476b02f48bc6f1302",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "azure-exchange",
+    "source_palette_sha256": "a307300e6ee2fce93418bc2bc66853480833eb694936fa73c72fc83a4b351728",
+    "published_palette_sha256": "8cc9d996bc170658c93d3b87ac9d894fc3590f969190325e4c5d98683c73f006",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  },
+  {
+    "id": "orchid-merge",
+    "source_palette_sha256": "4458652311ac556e74029008d5d41ba39f859fde2bcb8f3b5289fe86be299530",
+    "published_palette_sha256": "eb1cf98edaab5c032227cc0044f7259fe17d6b88dcddd829dc263f3ebdf9d373",
+    "physical_colors_preserved": true,
+    "publication_scope": "RGB palette and generic design description only"
+  }
+]

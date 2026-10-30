@@ -1,0 +1,159 @@
+{
+  "schema": "inzone-studio-catalog/v1",
+  "title": "INZONE Profile Studio",
+  "defaultProfileId": "amber-hinge-rose",
+  "profiles": [
+    {
+      "id": "amber-hinge-rose",
+      "name": "Amber Hinge + Rose",
+      "summary": "Green writing, amber Win/Fn and rose Shift keys.",
+      "status": "keeper",
+      "acceptance": "Preferred after physical comparison.",
+      "tell": "Amber Win/Fn plus rose Shift keys",
+      "parentId": "amber-hinge",
+      "palette": "data/palettes/amber-hinge-rose.json",
+      "tags": [
+        "Green writing",
+        "Amber accents",
+        "Rose Shift"
+      ]
+    },
+    {
+      "id": "amber-hinge",
+      "name": "Amber Hinge",
+      "summary": "Green writing with an amber Win/Fn pair.",
+      "status": "accepted",
+      "acceptance": "Physically accepted as a simpler alternative.",
+      "tell": "Amber Win and Fn",
+      "parentId": "jade-exchange",
+      "palette": "data/palettes/amber-hinge.json",
+      "tags": [
+        "Green writing",
+        "Amber accents"
+      ]
+    },
+    {
+      "id": "jade-exchange",
+      "name": "Jade Exchange",
+      "summary": "Green writing, mint landmarks, azure navigation and a violet frame.",
+      "status": "accepted",
+      "acceptance": "An established physical reference.",
+      "tell": "Green writing, mint landmarks, azure navigation and a violet frame.",
+      "parentId": "azure-exchange",
+      "palette": "data/palettes/jade-exchange.json",
+      "tags": [
+        "Green writing",
+        "Violet frame"
+      ]
+    },
+    {
+      "id": "rose-shift",
+      "name": "Rose Shift",
+      "summary": "A green field with a mirrored rose Shift pair.",
+      "status": "accepted",
+      "acceptance": "Perceptible and liked, but very subtle in the physical trial.",
+      "tell": "Rose Shift keys",
+      "parentId": "jade-exchange",
+      "palette": "data/palettes/rose-shift.json",
+      "tags": [
+        "Green writing",
+        "Rose Shift"
+      ]
+    },
+    {
+      "id": "moonlit-jade",
+      "name": "Moonlit Jade",
+      "summary": "Aqua-jade writing with citron numbers and brackets.",
+      "status": "experiment",
+      "acceptance": "Retained as an experiment; green writing was preferred for daily use.",
+      "tell": "Citron digits and brackets",
+      "parentId": "jade-exchange",
+      "palette": "data/palettes/moonlit-jade.json",
+      "tags": [
+        "Aqua writing",
+        "Citron landmarks"
+      ]
+    },
+    {
+      "id": "orchid-gates",
+      "name": "Orchid Gates",
+      "summary": "Pink-orchid Tab and Enter in the familiar violet frame.",
+      "status": "reference",
+      "acceptance": "The added distinction was barely perceptible in the physical trial.",
+      "tell": "Pink Tab and Enter",
+      "parentId": "jade-exchange",
+      "palette": "data/palettes/orchid-gates.json",
+      "tags": [
+        "Green writing",
+        "Orchid gates"
+      ]
+    },
+    {
+      "id": "paired-amber-contrast",
+      "name": "Paired Amber Contrast",
+      "summary": "Green writing with orange Ctrl and yellow Alt in an amber frame.",
+      "status": "accepted",
+      "acceptance": "The wider orange/yellow distinction was visible in the daylight trial.",
+      "tell": "Green writing with orange Ctrl and yellow Alt in an amber frame.",
+      "parentId": null,
+      "palette": "data/palettes/paired-amber-contrast.json",
+      "tags": [
+        "Green writing",
+        "Warm frame"
+      ]
+    },
+    {
+      "id": "azure-exchange",
+      "name": "Azure Exchange",
+      "summary": "Azure writing and green arrows beneath a warm function row.",
+      "status": "accepted",
+      "acceptance": "Readable and harmonious in the trial; green writing was later preferred.",
+      "tell": "Azure writing and green arrows beneath a warm function row.",
+      "parentId": null,
+      "palette": "data/palettes/azure-exchange.json",
+      "tags": [
+        "Azure writing",
+        "Violet frame"
+      ]
+    },
+    {
+      "id": "orchid-merge",
+      "name": "Orchid Merge",
+      "summary": "Green writing, violet command keys and an orchid function-row crown.",
+      "status": "reference",
+      "acceptance": "Retained reference; the frame and crown felt too similar.",
+      "tell": "Green writing, violet command keys and an orchid function-row crown.",
+      "parentId": "paired-amber-contrast",
+      "palette": "data/palettes/orchid-merge.json",
+      "tags": [
+        "Green writing",
+        "Orchid crown"
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "slot": 1,
+      "profileId": "amber-hinge-rose",
+      "tell": "Amber Win/Fn and rose Shifts"
+    },
+    {
+      "slot": 2,
+      "profileId": "rose-shift",
+      "tell": "Rose Shifts"
+    },
+    {
+      "slot": 3,
+      "profileId": "amber-hinge",
+      "tell": "Amber Win/Fn"
+    },
+    {
+      "slot": 4,
+      "profileId": "moonlit-jade",
+      "tell": "Aqua writing and citron numbers"
+    }
+  ],
+  "verifiedAt": "2026-10-30",
+  "setupLabel": "Example four-slot setup; not a connected device",
+  "compatibility": "Sony INZONE KBD-H75 US81; native preparation supports the inspected Web export version1.2.1.0 only."
+}
