@@ -33,6 +33,14 @@ physical acceptance. Share links carry the colors without requiring the saved
 file or another browser's local storage. Sony native exports use the separate
 **Use on my keyboard** workflow.
 
+**Copy share link** and **Copy assistant request** use the public studio even
+when you are running a local or offline copy. The visible **Public share link**
+field can be selected manually, and **Open shared preview** checks the recipient's
+view. The link carries all 81 colors so later reference-color edits do not alter
+the look. It uses a published comparison palette ID; that ID must remain in the
+public collection. Opening the public preview needs internet. Local edits stay
+on the local page, and no native export or file metadata is included.
+
 To use a look on your own keyboard:
 
 1. Open [Sony Hub](https://inzone-hub-for-web.sony.net/), identify the intended

@@ -4,6 +4,8 @@ export const PAIRED_KEYS: ReadonlyArray<readonly [string, string]> = [
   ['CTRL_L', 'CTRL_R'], ['ALT_L', 'ALT_R'], ['SHIFT_L', 'SHIFT_R'],
 ];
 
+export const PUBLIC_STUDIO_URL = 'https://rana.github.io/inzone-profile-studio/';
+
 export function normalizeColor(value: string): string {
   const color = value.trim().toUpperCase();
   if (!/^#[0-9A-F]{6}$/.test(color)) throw new Error('Use a six-digit color, such as #FFB000.');
@@ -49,6 +51,7 @@ export function makeCandidate(base: Candidate, colors: Record<string, string>, l
   };
 }
 
+/** Same-origin address state; explicit recipient sharing uses publicShareUrl. */
 export function shareUrl(url: string, profileId: string, colors: Record<string, string>, original: Record<string, string>): string {
   const target = new URL(url);
   target.search = '';
@@ -56,6 +59,26 @@ export function shareUrl(url: string, profileId: string, colors: Record<string, 
   target.searchParams.set('profile', profileId);
   const changes = colorDifferences(original, colors).map(key => `${key}.${colors[key]!.slice(1)}`);
   if (changes.length) target.searchParams.set('colors', changes.join(','));
+  return target.href;
+}
+
+/** Explicit sharing is portable; all colors survive later comparison-base edits. */
+export function publicShareUrl(profileId: string, colors: Record<string, string>, original: Record<string, string>, layout: LayoutKey[]): string {
+  if (typeof profileId !== 'string' || profileId.length > 128 || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(profileId)) {
+    throw new Error('Use a published palette identifier containing lowercase letters, numbers and hyphens.');
+  }
+  const normalizedMap = (map: Record<string, string>): Record<string, string> => {
+    const normalized = Object.fromEntries(Object.entries(map).map(([key, value]) => [key, normalizeColor(value)]));
+    validateColors(normalized, layout);
+    return normalized;
+  };
+  const snapshot = normalizedMap(colors);
+  normalizedMap(original);
+  const entries = Object.keys(snapshot).sort().map(key => `${key}.${snapshot[key]!.slice(1)}`).join(',');
+  if (entries.length > 2000) throw new Error('This shared palette is too large.');
+  const target = new URL(PUBLIC_STUDIO_URL);
+  target.searchParams.set('profile', profileId);
+  target.searchParams.set('colors', entries);
   return target.href;
 }
 

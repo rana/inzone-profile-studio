@@ -2,7 +2,7 @@ import './style.css';
 import { LatestTask } from './async-task';
 import { readPaletteFile } from './palette-file';
 import { readNativeFile, prepareNative, verifyNative } from './native';
-import { colorDifferences, colorsFromUrl, makeCandidate, recolor, shareUrl, validateColors } from './model';
+import { colorDifferences, colorsFromUrl, makeCandidate, publicShareUrl, recolor, shareUrl, validateColors } from './model';
 import type { Candidate, Catalog, CatalogProfile, LayoutKey } from './types';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;
@@ -31,6 +31,7 @@ let preparedDownloaded = false;
 const paletteTask = new LatestTask();
 const sourceTask = new LatestTask();
 const readbackTask = new LatestTask();
+const copyTask = new LatestTask();
 
 function el<K extends keyof HTMLElementTagNameMap>(tag: K, cls = '', text = ''): HTMLElementTagNameMap[K] {
   const node = document.createElement(tag);
@@ -59,9 +60,47 @@ function download(data: BlobPart | Blob, filename: string, type = 'application/j
   const url = URL.createObjectURL(blob); const a = el('a'); a.href = url; a.download = filename; a.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
-async function copyText(text: string, success: string): Promise<void> {
-  try { await navigator.clipboard.writeText(text); byId<HTMLTextAreaElement>('copy-fallback').hidden = true; inform(success); }
-  catch { const field = byId<HTMLTextAreaElement>('copy-fallback'); field.hidden = false; field.value = text; field.focus(); field.select(); inform('Copy the selected text below.'); }
+function invalidateSharing(): void {
+  copyTask.invalidate();
+  byId('share-panel').hidden = true;
+  byId<HTMLInputElement>('public-share-link').value = '';
+  byId<HTMLAnchorElement>('open-shared-preview').removeAttribute('href');
+  const fallback = byId<HTMLTextAreaElement>('copy-fallback');
+  fallback.hidden = true; fallback.value = '';
+}
+async function copyText(text: string, success: string, fallback: 'public-link' | 'text'): Promise<void> {
+  const profileId = selectedId;
+  const base = currentBase();
+  const colors = currentColors();
+  const ownsContext = (): boolean => selectedId === profileId && currentBase() === base && currentColors() === colors;
+  await copyTask.run(() => navigator.clipboard.writeText(text), () => {
+    if (!ownsContext()) return;
+    byId<HTMLTextAreaElement>('copy-fallback').hidden = true; inform(success);
+  }, () => {
+    if (!ownsContext()) return;
+    if (fallback === 'public-link') {
+      const field = byId<HTMLInputElement>('public-share-link');
+      field.focus(); field.select(); inform('Copy the selected public share link below.');
+    } else {
+      const field = byId<HTMLTextAreaElement>('copy-fallback');
+      field.hidden = false; field.value = text; field.focus(); field.select(); inform('Copy the selected assistant request below.');
+    }
+  });
+}
+function shareCurrentPalette(forAssistant: boolean): void {
+  invalidateSharing();
+  try {
+    const link = publicShareUrl(selectedId, currentColors(), currentBase().key_colors, layout);
+    byId<HTMLInputElement>('public-share-link').value = link;
+    byId<HTMLAnchorElement>('open-shared-preview').href = link;
+    byId('share-panel').hidden = false;
+    if (forAssistant) {
+      const request = `Apply the INZONE Profile Studio look “${selectedCandidate().name}”: ${link}. Back up the actual target slot first. Prepare from its fresh same-slot Sony Web native export, preserve Main/Fn, performance, macros and other unrelated fields, apply through Sony Hub and Save. Take a new same-slot export and verify every field. Keep a rollback and record physical feedback. Palette data is design intent, not a native Sony import.`;
+      void copyText(request, 'Assistant request copied. Paste it into your assistant chat.', 'text');
+    } else {
+      void copyText(link, 'Public share link copied. It carries all 81 colors, not native exports.', 'public-link');
+    }
+  } catch (error) { inform((error as Error).message, true); }
 }
 function updateUrl(): void {
   history.replaceState(null, '', shareUrl(location.href, selectedId, currentColors(), currentBase().key_colors));
@@ -78,7 +117,7 @@ function closeNativeWorkflow(): void {
 }
 function selectProfile(id: string): void {
   if (!palettes.has(id)) return;
-  invalidatePaletteRead(); closeNativeWorkflow();
+  invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow();
   selectedId = id; selectedKey = 'SHIFT_L';
   compareId = defaultComparisonId();
   updateUrl(); persist(); render(); inform('');
@@ -191,12 +230,13 @@ function render(): void {
   renderInspector(); requestAnimationFrame(renderBoards);
 }
 function applyEdit(keys: string[], color: string): void {
-  invalidatePaletteRead(); closeNativeWorkflow();
+  invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow();
   try { drafts.set(selectedId, recolor(currentColors(), keys, color)); validateColors(currentColors(), layout); updateUrl(); persist(); renderProfileContext(); renderInspector(); renderBoards(); inform('Variation saved in this browser. Download or share it to keep another copy.'); }
   catch (error) { inform((error as Error).message, true); renderInspector(); }
 }
 async function openPaletteFile(): Promise<void> {
   paletteTask.invalidate();
+  invalidateSharing();
   const input = byId<HTMLInputElement>('palette-file');
   const file = input.files?.[0];
   byId('open-palette').removeAttribute('aria-busy');
@@ -215,7 +255,7 @@ async function openPaletteFile(): Promise<void> {
     const draftBase = imported.id?.endsWith('-draft') ? imported.id.slice(0, -6) : undefined;
     const knownId = exactId || (draftBase && palettes.has(draftBase) ? draftBase : undefined);
     const baseId = knownId || sourceId;
-    closeNativeWorkflow();
+    invalidateSharing(); closeNativeWorkflow();
     selectedId = baseId; selectedKey = 'SHIFT_L';
     const matchesOriginal = colorDifferences(currentBase().key_colors, imported.colors).length === 0;
     if (matchesOriginal) drafts.delete(baseId);
@@ -329,6 +369,7 @@ function createShell(): void {
         <section class="inspector" aria-label="Selected key"><span id="selected-key-swatch" class="selected-swatch" aria-hidden="true"></span><div class="selected-description"><strong id="selected-key-name"></strong><code id="selected-key-color"></code></div><label class="choose-key">Choose key<select id="key-select"></select></label><span class="inspector-tip">Click a key to inspect its color.</span></section>
         <section id="edit-section" class="edit-section" hidden><div><h3>Make it yours</h3><p>Work on a local variation. The original stays intact.</p></div><div class="edit-controls"><label>Apply color to<select id="edit-target"><option value="selected">Selected key</option><option value="shift">Both Shift keys</option><option value="hinge">Win and Fn</option><option value="ctrl">Both Ctrl keys</option><option value="alt">Both Alt keys</option><option value="gates">Tab and Enter</option></select></label><label>Color<input id="key-color" type="color" value="#FF0080"></label><label>Hex<input id="hex-color" value="#FF0080" maxlength="7" spellcheck="false" autocomplete="off"></label><button type="button" id="apply-color">Apply color</button></div><div class="edit-footer"><p>Ctrl, Alt and Shift pairs stay matched. Every key stays illuminated.</p><button type="button" id="reset-key" class="text-button">Restore selected key</button><button type="button" id="reset-draft" class="text-button">Restore this palette</button></div></section>
         <div class="action-bar"><button type="button" id="share-profile" class="quiet-button">Copy share link</button><button type="button" id="download-palette" class="quiet-button">Save palette</button><button type="button" id="open-palette" class="quiet-button" aria-describedby="palette-file-help">Open palette JSON</button><input type="file" id="palette-file" accept=".json,application/json" aria-label="Open palette design JSON" hidden><button type="button" id="copy-request" class="text-button">Copy assistant request</button></div>
+        <section id="share-panel" class="share-panel" aria-label="Share this palette" hidden><label for="public-share-link">Public share link</label><div class="share-link-row"><input id="public-share-link" type="url" readonly spellcheck="false" aria-describedby="public-share-help"><a id="open-shared-preview" target="_blank" rel="noopener">Open shared preview ↗</a></div><p id="public-share-help">The recipient opens the public studio online. This link carries all 81 colors, not native exports.</p></section>
         <p id="palette-file-help" class="palette-file-help">Palette design files open here. Sony native exports belong in “Use on my keyboard”.</p><p id="profile-acceptance" class="acceptance-note"></p><p id="notice" class="notice" role="status" aria-live="polite"></p><textarea id="copy-fallback" class="copy-fallback" aria-label="Text to copy" readonly hidden></textarea>
         <details class="setup-example"><summary>One example four-slot setup</summary><p id="setup-caption"></p><div id="example-slots" class="example-slots"></div><p>On the keyboard, hold Fn and tap Tab to cycle profiles. This page previews designs; it is not connected to your device.</p></details>
         <footer class="workbench-footer"><p>Exact RGB assignments, not calibrated LED output. Physical color and legibility vary with keycaps and room light.</p><p>Built for shared exploration. Native exports never leave this tab.</p><p><a href="https://github.com/rana/inzone-profile-studio/releases/latest/download/inzone-profile-studio-offline.zip">Keep an offline copy</a> · <a href="https://github.com/rana/inzone-profile-studio/blob/main/docs/RECOVERY.md" target="_blank" rel="noopener">Recovery guide</a><br>Requires Node 22.12+ on the Node 22 line. Save important variations as palette files; browser favorites and drafts are not included.</p></footer>
@@ -344,20 +385,21 @@ function wireEvents(): void {
   byId<HTMLSelectElement>('compare-profile').addEventListener('change', event => { compareId = (event.target as HTMLSelectElement).value; renderBoards(); });
   byId<HTMLInputElement>('swatches').addEventListener('change', event => { swatches = (event.target as HTMLInputElement).checked; renderBoards(); });
   byId<HTMLSelectElement>('key-select').addEventListener('change', event => { selectedKey = (event.target as HTMLSelectElement).value; renderInspector(); renderBoards(); });
-  byId('edit-target').addEventListener('change', () => { invalidatePaletteRead(); renderInspector(); });
-  byId<HTMLInputElement>('key-color').addEventListener('input', event => { invalidatePaletteRead(); byId<HTMLInputElement>('hex-color').value = (event.target as HTMLInputElement).value.toUpperCase(); });
-  byId('hex-color').addEventListener('input', () => invalidatePaletteRead());
+  byId('edit-target').addEventListener('change', () => { invalidatePaletteRead(); invalidateSharing(); renderInspector(); });
+  byId<HTMLInputElement>('key-color').addEventListener('input', event => { invalidatePaletteRead(); invalidateSharing(); byId<HTMLInputElement>('hex-color').value = (event.target as HTMLInputElement).value.toUpperCase(); });
+  byId('hex-color').addEventListener('input', () => { invalidatePaletteRead(); invalidateSharing(); });
   byId('apply-color').addEventListener('click', () => { const group = byId<HTMLSelectElement>('edit-target').value; applyEdit(group === 'selected' ? [selectedKey] : groupKeys[group]!, byId<HTMLInputElement>('hex-color').value); });
   byId('reset-key').addEventListener('click', () => applyEdit([selectedKey], currentBase().key_colors[selectedKey]!));
-  byId('reset-draft').addEventListener('click', () => { invalidatePaletteRead(); closeNativeWorkflow(); drafts.delete(selectedId); updateUrl(); persist(); renderProfileContext(); renderInspector(); renderBoards(); inform('Original palette restored.'); });
-  byId('share-profile').addEventListener('click', () => { void copyText(shareUrl(location.href, selectedId, currentColors(), currentBase().key_colors), 'Share link copied. It includes this palette and your color changes, not native files.'); });
-  byId('open-palette').addEventListener('click', () => { invalidatePaletteRead(); inform('Choose a palette design JSON file. Sony native exports use the separate native workflow.'); byId<HTMLInputElement>('palette-file').click(); });
+  byId('reset-draft').addEventListener('click', () => { invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow(); drafts.delete(selectedId); updateUrl(); persist(); renderProfileContext(); renderInspector(); renderBoards(); inform('Original palette restored.'); });
+  byId('share-profile').addEventListener('click', () => shareCurrentPalette(false));
+  byId<HTMLInputElement>('public-share-link').addEventListener('focus', event => (event.target as HTMLInputElement).select());
+  byId('open-palette').addEventListener('click', () => { invalidatePaletteRead(); invalidateSharing(); inform('Choose a palette design JSON file. Sony native exports use the separate native workflow.'); byId<HTMLInputElement>('palette-file').click(); });
   byId('palette-file').addEventListener('change', () => { void openPaletteFile(); });
   byId('palette-file').addEventListener('cancel', () => { invalidatePaletteRead(); inform('No palette opened. The current preview is unchanged.'); });
   byId('download-palette').addEventListener('click', () => { const candidate = selectedCandidate(); download(JSON.stringify(candidate, null, 2) + '\n', `${candidate.id}.json`); inform('Palette saved. Reopen it with “Open palette JSON”. To prepare a Sony import, choose “Use on my keyboard”.'); });
-  byId('copy-request').addEventListener('click', () => { const link = shareUrl(location.href, selectedId, currentColors(), currentBase().key_colors); void copyText(`Apply the INZONE Profile Studio look “${selectedCandidate().name}”: ${link}. Back up the actual target slot first. Prepare from its fresh same-slot Sony Web native export, preserve Main/Fn, performance, macros and other unrelated fields, apply through Sony Hub and Save. Take a new same-slot export and verify every field. Keep a rollback and record physical feedback. Palette data is design intent, not a native Sony import.`, 'Assistant request copied. Paste it into your assistant chat.'); });
+  byId('copy-request').addEventListener('click', () => shareCurrentPalette(true));
   const dialog = byId<HTMLDialogElement>('export-dialog');
-  byId('use-profile').addEventListener('click', () => { invalidatePaletteRead(); clearExport(); dialog.showModal(); });
+  byId('use-profile').addEventListener('click', () => { invalidatePaletteRead(); invalidateSharing(); clearExport(); dialog.showModal(); });
   byId('close-export').addEventListener('click', () => { clearExport(); dialog.close(); });
   dialog.addEventListener('cancel', () => clearExport());
   dialog.addEventListener('close', () => { if (!dialog.open) clearExport(); });

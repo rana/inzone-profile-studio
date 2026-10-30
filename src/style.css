@@ -1089,6 +1089,41 @@ dialog::backdrop {
   border-style: dashed;
 }
 
+.share-panel {
+  margin-top: 18px;
+  padding: 15px 0 3px;
+  border-top: 1px solid var(--line);
+}
+.share-panel label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: .8rem;
+  font-weight: 650;
+}
+.share-link-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 15px;
+}
+.share-link-row input {
+  flex: 1 1 260px;
+  min-width: 0;
+  width: 100%;
+  font-family: ui-monospace, monospace;
+  font-size: .76rem;
+}
+.share-link-row a {
+  font-size: .8rem;
+  white-space: nowrap;
+}
+.share-panel p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: .76rem;
+  line-height: 1.5;
+}
+
 @media (max-width:480px) {
   .palette-file-help {
     font-size: .73rem;

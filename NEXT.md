@@ -1,59 +1,58 @@
 # Next useful work
 
 Read [foundations](docs/FOUNDATIONS.md), the [research queue](docs/RESEARCH.md)
-and Git status before choosing work. Q-01 save/open and Q-04 offline recovery are
-complete. Q-05 portable sharing from a local copy is the next autonomous task.
-Physical trials still require the owner.
+and Git status before choosing work. Q-01, Q-04 and Q-05 are complete. The next
+useful evidence is owner/recipient feedback, not another feature added for a timer.
 
 ## Current delivery
 
 - Public studio: https://rana.github.io/inzone-profile-studio/
 - Public source: https://github.com/rana/inzone-profile-studio
-- Offline package and checksums: https://github.com/rana/inzone-profile-studio/releases/latest
-- Nine curated US81 palettes, preview/comparison, paired drafts, favorites,
-  save/open palette files, browser-local native preparation and strict readback.
+- Offline packages: https://github.com/rana/inzone-profile-studio/releases/latest
+- Nine curated US81 palettes; preview/comparison, paired drafts, favorites,
+  save/open files, portable public sharing and browser-local native preparation.
 - Preserve the accepted Amber Hinge + Rose keeper and simpler Amber Hinge
   reference. Private exports, photos, raw feedback and rollback records stay
-  outside public Git and release assets.
+  outside public Git and releases. No unattended hardware writes.
 
-## Completed recovery work
+## Verified software paths
 
-Q-01 reopens saved designs with exact 81-key, lit-color and pair checks. File
-metadata cannot confer physical acceptance. Actual browser save/open and URL-only
-reconstruction preserved every color; malformed files left the preview intact.
+Q-01: actual save/open and URL-only recovery preserved all 81 colors. Malformed
+palette files left the current preview intact; metadata cannot confer acceptance.
 
-Q-04 provides a deterministic allowlisted ZIP, source/version identity, checksums,
-dependency-free verifier/server and [recovery guide](docs/RECOVERY.md). It requires
-Node 22.12+ on the Node 22 line, already available before offline recovery; npm
-and project dependencies are not needed by the extracted app. Browser drafts
-and favorites are not bundled: save important variants as palette files.
+Q-04: deterministic public ZIP with source/version identity, checksums, verifier,
+read-only loopback server and [recovery guide](docs/RECOVERY.md). Node 22.12+ on
+the Node 22 line is required. All 15 app assets matched in a clean extraction
+inside a loopback-only network namespace with no routes. A fresh-port browser
+recovered all 81 colors from a palette saved on the public site. Its browser
+network was not disabled; the isolated asset crawl is separate offline evidence.
 
-The clean-directory package served all 15 app assets with exact hashes inside a
-network namespace containing only loopback and no routes. All nine maps retained
-81 lit keys and paired modifiers. A browser on a fresh local port recovered all
-81 colors from a palette actually saved from the public site. The browser itself
-was not network-disabled; the isolated asset check is the separate offline
-evidence. Twenty-six app tests, eight packaging tests and the build pass.
+Q-05: explicit sharing and assistant requests now use the canonical public site,
+with a sorted full 81-color snapshot. The existing profile/colors URL codec is
+unchanged. A local five-key variation reconstructed exactly in the live public
+decoder before deployment. Same-origin editing remained local. A selectable
+Public share link and preview action are visible; changes clear outdated links
+and invalidate delayed clipboard feedback. Thirty app tests and eight packaging
+tests pass. The comparison ID must still exist in the public catalog; full colors
+protect against reference-color drift, not deletion of the reference ID.
 
-## Next priority: Q-05 portable local sharing
+## Next required evidence
 
-Explicit sharing currently builds a URL from the current origin. A local/offline
-copy therefore copies a loopback address, which does not open the public studio
-on the recipient's computer. Make explicit sharing and assistant requests use the
-published studio for known published bases, while address-bar updates stay local.
-Show the generated share URL in the page so it is inspectable and manually
-copyable. Preserve exact colors and draft status; include no native files or
-private metadata. Tests must distinguish local navigation from portable sharing.
-Stop after this path works; do not add accounts or remote storage.
+- Q-03: the owner can choose one [punctuation study](docs/PUNCTUATION-STUDIES.md)
+  for a real same-slot trial. Keep current hardware unchanged until selected.
+- Q-02: a recipient's own fresh source-slot export and feedback establish actual
+  second-keyboard compatibility. Keep the export private.
+- Actual Mac behavior and USB power-cycle persistence need their own device tests.
 
-Q-02 needs a recipient's fresh source-slot export and actual feedback; Q-03's
-[punctuation studies](docs/PUNCTUATION-STUDIES.md) await a chosen physical trial.
-Do not repeat previews or write daily hardware merely because the timer fires.
+While these are pending, respond to concrete new feedback or reproducible issues.
+If there is no actionable change, leave the working studio alone and stay quiet.
+Do not keep regenerating palettes, rerunning unchanged checks or invoking Claude
+merely because a heartbeat fired.
 
 ## Evidence limits
 
-Screen RGB is not calibrated LED output. Slot examples are not live device state.
-Matching files do not prove physical behavior, USB persistence or Mac acceptance.
-The controller retained desktop width during attempted narrow viewport checks;
-no new mobile-width pass is established. Clipboard inspection returned an older
-tool value, so share reconstruction was checked through the visible address.
+RGB previews are not calibrated LED output. Slot examples are not live device
+state. File matches do not establish physical behavior. The current controller
+did not apply narrow viewport overrides, so no mobile-width pass is established.
+Clipboard inspection returned older tool data; URL inspection and actual public
+reconstruction are the sharing evidence, not a claim about that tool's clipboard.

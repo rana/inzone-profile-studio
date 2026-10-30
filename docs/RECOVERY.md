@@ -73,6 +73,17 @@ the Amber Hinge + Rose keeper. It does not contain your browser’s favorites or
 local drafts. Browser storage belongs to its browser profile and origin, so save
 important variations as palette files in your own backup location.
 
+## Share from a local copy
+
+In version 0.1.1 and later, **Copy share link** and **Copy assistant request**
+create public-studio links while your editing page remains local. The visible
+**Public share link** field is selectable for manual copying. **Open shared
+preview** opens the public site and needs internet; the recipient does not need
+your local server. Every physical key color is included, with a published
+comparison palette ID. Native exports and private file metadata stay out of the
+link. Editing, restoring, importing or choosing another palette clears the old
+sharing field; share again when ready.
+
 ## What still needs your own backup or connection
 
 Previewing, editing, opening palettes, preparing a native file and comparing a
