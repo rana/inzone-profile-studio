@@ -1,5 +1,6 @@
 import './style.css';
 import { LatestTask } from './async-task';
+import { readPaletteFile } from './palette-file';
 import { readNativeFile, prepareNative, verifyNative } from './native';
 import { colorDifferences, colorsFromUrl, makeCandidate, recolor, shareUrl, validateColors } from './model';
 import type { Candidate, Catalog, CatalogProfile, LayoutKey } from './types';
@@ -27,6 +28,7 @@ let sourceFile: File | null = null;
 let prepared: ReturnType<typeof prepareNative> | null = null;
 let exportCandidate: Candidate | null = null;
 let preparedDownloaded = false;
+const paletteTask = new LatestTask();
 const sourceTask = new LatestTask();
 const readbackTask = new LatestTask();
 
@@ -64,8 +66,19 @@ async function copyText(text: string, success: string): Promise<void> {
 function updateUrl(): void {
   history.replaceState(null, '', shareUrl(location.href, selectedId, currentColors(), currentBase().key_colors));
 }
+function invalidatePaletteRead(): void {
+  paletteTask.invalidate();
+  byId<HTMLInputElement>('palette-file').value = '';
+  byId('open-palette').removeAttribute('aria-busy');
+}
+function closeNativeWorkflow(): void {
+  clearExport();
+  const dialog = byId<HTMLDialogElement>('export-dialog');
+  if (dialog.open) dialog.close();
+}
 function selectProfile(id: string): void {
   if (!palettes.has(id)) return;
+  invalidatePaletteRead(); closeNativeWorkflow();
   selectedId = id; selectedKey = 'SHIFT_L';
   compareId = defaultComparisonId();
   updateUrl(); persist(); render(); inform('');
@@ -178,9 +191,50 @@ function render(): void {
   renderInspector(); requestAnimationFrame(renderBoards);
 }
 function applyEdit(keys: string[], color: string): void {
+  invalidatePaletteRead(); closeNativeWorkflow();
   try { drafts.set(selectedId, recolor(currentColors(), keys, color)); validateColors(currentColors(), layout); updateUrl(); persist(); renderProfileContext(); renderInspector(); renderBoards(); inform('Variation saved in this browser. Download or share it to keep another copy.'); }
   catch (error) { inform((error as Error).message, true); renderInspector(); }
 }
+async function openPaletteFile(): Promise<void> {
+  paletteTask.invalidate();
+  const input = byId<HTMLInputElement>('palette-file');
+  const file = input.files?.[0];
+  byId('open-palette').removeAttribute('aria-busy');
+  if (!file) return;
+  const sourceId = selectedId;
+  const source = currentBase();
+  closeNativeWorkflow();
+  byId('open-palette').setAttribute('aria-busy', 'true');
+  inform('Opening the palette design…');
+  const ownsContext = (): boolean =>
+    selectedId === sourceId && currentBase() === source && input.files?.[0] === file;
+  await paletteTask.run(() => readPaletteFile(file, layout), imported => {
+    if (!ownsContext()) return;
+    validateColors(imported.colors, layout);
+    const exactId = imported.id && palettes.has(imported.id) ? imported.id : undefined;
+    const draftBase = imported.id?.endsWith('-draft') ? imported.id.slice(0, -6) : undefined;
+    const knownId = exactId || (draftBase && palettes.has(draftBase) ? draftBase : undefined);
+    const baseId = knownId || sourceId;
+    closeNativeWorkflow();
+    selectedId = baseId; selectedKey = 'SHIFT_L';
+    const matchesOriginal = colorDifferences(currentBase().key_colors, imported.colors).length === 0;
+    if (matchesOriginal) drafts.delete(baseId);
+    else drafts.set(baseId, { ...imported.colors });
+    compareId = baseId; view = 'compare';
+    updateUrl(); persist(); render();
+    byId('open-palette').removeAttribute('aria-busy'); input.value = '';
+    const reference = currentMeta().name;
+    const association = knownId ? '' : ` No matching library palette was identified; ${reference} is used for comparison.`;
+    inform(matchesOriginal
+      ? `“${imported.name}” matches the published ${reference} palette. Showing that original; the file adds no physical acceptance evidence.${association}`
+      : `Opened “${imported.name}” as a local variation of ${reference}, not a physically tested look.${association} Save the palette or share its link to keep a portable copy.`);
+  }, error => {
+    if (!ownsContext()) return;
+    byId('open-palette').removeAttribute('aria-busy'); input.value = '';
+    inform((error as Error).message, true);
+  });
+}
+
 function selectedCandidate(): Candidate { return makeCandidate(currentBase(), currentColors(), layout); }
 function exportMessage(message: string, error = false): void { const node = byId('export-message'); node.textContent = message; node.classList.toggle('error', error); }
 function clearExport(): void {
@@ -274,8 +328,8 @@ function createShell(): void {
         <section id="compare-section" class="compare-section" hidden><div class="section-heading"><label>Compare with<select id="compare-profile"></select></label><p id="compare-result"></p></div><div id="compare-keyboard" class="keyboard-stage"></div></section>
         <section class="inspector" aria-label="Selected key"><span id="selected-key-swatch" class="selected-swatch" aria-hidden="true"></span><div class="selected-description"><strong id="selected-key-name"></strong><code id="selected-key-color"></code></div><label class="choose-key">Choose key<select id="key-select"></select></label><span class="inspector-tip">Click a key to inspect its color.</span></section>
         <section id="edit-section" class="edit-section" hidden><div><h3>Make it yours</h3><p>Work on a local variation. The original stays intact.</p></div><div class="edit-controls"><label>Apply color to<select id="edit-target"><option value="selected">Selected key</option><option value="shift">Both Shift keys</option><option value="hinge">Win and Fn</option><option value="ctrl">Both Ctrl keys</option><option value="alt">Both Alt keys</option><option value="gates">Tab and Enter</option></select></label><label>Color<input id="key-color" type="color" value="#FF0080"></label><label>Hex<input id="hex-color" value="#FF0080" maxlength="7" spellcheck="false" autocomplete="off"></label><button type="button" id="apply-color">Apply color</button></div><div class="edit-footer"><p>Ctrl, Alt and Shift pairs stay matched. Every key stays illuminated.</p><button type="button" id="reset-key" class="text-button">Restore selected key</button><button type="button" id="reset-draft" class="text-button">Restore this palette</button></div></section>
-        <div class="action-bar"><button type="button" id="share-profile" class="quiet-button">Copy share link</button><button type="button" id="download-palette" class="quiet-button">Save palette</button><button type="button" id="copy-request" class="text-button">Copy assistant request</button></div>
-        <p id="profile-acceptance" class="acceptance-note"></p><p id="notice" class="notice" role="status" aria-live="polite"></p><textarea id="copy-fallback" class="copy-fallback" aria-label="Text to copy" readonly hidden></textarea>
+        <div class="action-bar"><button type="button" id="share-profile" class="quiet-button">Copy share link</button><button type="button" id="download-palette" class="quiet-button">Save palette</button><button type="button" id="open-palette" class="quiet-button" aria-describedby="palette-file-help">Open palette JSON</button><input type="file" id="palette-file" accept=".json,application/json" aria-label="Open palette design JSON" hidden><button type="button" id="copy-request" class="text-button">Copy assistant request</button></div>
+        <p id="palette-file-help" class="palette-file-help">Palette design files open here. Sony native exports belong in “Use on my keyboard”.</p><p id="profile-acceptance" class="acceptance-note"></p><p id="notice" class="notice" role="status" aria-live="polite"></p><textarea id="copy-fallback" class="copy-fallback" aria-label="Text to copy" readonly hidden></textarea>
         <details class="setup-example"><summary>One example four-slot setup</summary><p id="setup-caption"></p><div id="example-slots" class="example-slots"></div><p>On the keyboard, hold Fn and tap Tab to cycle profiles. This page previews designs; it is not connected to your device.</p></details>
         <footer class="workbench-footer"><p>Exact RGB assignments, not calibrated LED output. Physical color and legibility vary with keycaps and room light.</p><p>Built for shared exploration. Native exports never leave this tab.</p></footer>
       </main>
@@ -290,16 +344,20 @@ function wireEvents(): void {
   byId<HTMLSelectElement>('compare-profile').addEventListener('change', event => { compareId = (event.target as HTMLSelectElement).value; renderBoards(); });
   byId<HTMLInputElement>('swatches').addEventListener('change', event => { swatches = (event.target as HTMLInputElement).checked; renderBoards(); });
   byId<HTMLSelectElement>('key-select').addEventListener('change', event => { selectedKey = (event.target as HTMLSelectElement).value; renderInspector(); renderBoards(); });
-  byId('edit-target').addEventListener('change', () => renderInspector());
-  byId<HTMLInputElement>('key-color').addEventListener('input', event => { byId<HTMLInputElement>('hex-color').value = (event.target as HTMLInputElement).value.toUpperCase(); });
+  byId('edit-target').addEventListener('change', () => { invalidatePaletteRead(); renderInspector(); });
+  byId<HTMLInputElement>('key-color').addEventListener('input', event => { invalidatePaletteRead(); byId<HTMLInputElement>('hex-color').value = (event.target as HTMLInputElement).value.toUpperCase(); });
+  byId('hex-color').addEventListener('input', () => invalidatePaletteRead());
   byId('apply-color').addEventListener('click', () => { const group = byId<HTMLSelectElement>('edit-target').value; applyEdit(group === 'selected' ? [selectedKey] : groupKeys[group]!, byId<HTMLInputElement>('hex-color').value); });
   byId('reset-key').addEventListener('click', () => applyEdit([selectedKey], currentBase().key_colors[selectedKey]!));
-  byId('reset-draft').addEventListener('click', () => { drafts.delete(selectedId); updateUrl(); persist(); renderProfileContext(); renderInspector(); renderBoards(); inform('Original palette restored.'); });
+  byId('reset-draft').addEventListener('click', () => { invalidatePaletteRead(); closeNativeWorkflow(); drafts.delete(selectedId); updateUrl(); persist(); renderProfileContext(); renderInspector(); renderBoards(); inform('Original palette restored.'); });
   byId('share-profile').addEventListener('click', () => { void copyText(shareUrl(location.href, selectedId, currentColors(), currentBase().key_colors), 'Share link copied. It includes this palette and your color changes, not native files.'); });
-  byId('download-palette').addEventListener('click', () => { const candidate = selectedCandidate(); download(JSON.stringify(candidate, null, 2) + '\n', `${candidate.id}.json`); inform('Palette saved. Use “Use on my keyboard” to prepare a native Sony file.'); });
+  byId('open-palette').addEventListener('click', () => { invalidatePaletteRead(); inform('Choose a palette design JSON file. Sony native exports use the separate native workflow.'); byId<HTMLInputElement>('palette-file').click(); });
+  byId('palette-file').addEventListener('change', () => { void openPaletteFile(); });
+  byId('palette-file').addEventListener('cancel', () => { invalidatePaletteRead(); inform('No palette opened. The current preview is unchanged.'); });
+  byId('download-palette').addEventListener('click', () => { const candidate = selectedCandidate(); download(JSON.stringify(candidate, null, 2) + '\n', `${candidate.id}.json`); inform('Palette saved. Reopen it with “Open palette JSON”. To prepare a Sony import, choose “Use on my keyboard”.'); });
   byId('copy-request').addEventListener('click', () => { const link = shareUrl(location.href, selectedId, currentColors(), currentBase().key_colors); void copyText(`Apply the INZONE Profile Studio look “${selectedCandidate().name}”: ${link}. Back up the actual target slot first. Prepare from its fresh same-slot Sony Web native export, preserve Main/Fn, performance, macros and other unrelated fields, apply through Sony Hub and Save. Take a new same-slot export and verify every field. Keep a rollback and record physical feedback. Palette data is design intent, not a native Sony import.`, 'Assistant request copied. Paste it into your assistant chat.'); });
   const dialog = byId<HTMLDialogElement>('export-dialog');
-  byId('use-profile').addEventListener('click', () => { clearExport(); dialog.showModal(); });
+  byId('use-profile').addEventListener('click', () => { invalidatePaletteRead(); clearExport(); dialog.showModal(); });
   byId('close-export').addEventListener('click', () => { clearExport(); dialog.close(); });
   dialog.addEventListener('cancel', () => clearExport());
   dialog.addEventListener('close', () => { if (!dialog.open) clearExport(); });

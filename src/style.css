@@ -1077,3 +1077,20 @@ dialog::backdrop {
     min-height: 42px
   }
 }
+
+.palette-file-help {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: .76rem;
+  max-width: 75ch;
+}
+
+#open-palette[aria-busy=true] {
+  border-style: dashed;
+}
+
+@media (max-width:480px) {
+  .palette-file-help {
+    font-size: .73rem;
+  }
+}

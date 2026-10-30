@@ -25,6 +25,14 @@ Choose a palette to relight the on-screen board. Inspect a key, share the select
 look, or open the secondary comparison and draft tools. Previewing never writes
 the keyboard. A downloaded palette is a design file, not a Sony native import.
 
+Use **Save palette** to keep a design JSON, then **Open palette JSON** to recover
+it later. Opening validates all 81 illuminated keys and matched modifier pairs.
+Changed colors become a local variation with a comparison to the published
+original; a matching file shows the existing original. File metadata never adds
+physical acceptance. Share links carry the colors without requiring the saved
+file or another browser's local storage. Sony native exports use the separate
+**Use on my keyboard** workflow.
+
 To use a look on your own keyboard:
 
 1. Open [Sony Hub](https://inzone-hub-for-web.sony.net/), identify the intended
