@@ -8,8 +8,7 @@ participant/device tests run separately and do not block independent progress.
 
 | Priority | Question / next bounded action | Completion evidence |
 | --- | --- | --- |
-| Q-07 · next | Can a reader compare subtle changes without scrolling between boards? Investigate a small in-place A/B preview; the readable changed-key list is delivered. | The changed keys and before/after colors are identifiable with pointer and keyboard; viewing a reference cannot change the look used for sharing or native preparation. |
-| Q-08 · ready | Exercise the real narrow-width choose → compare → save/open → share journey; repair observed friction. | Record actual viewport sizes and results; no overflow or inaccessible essential actions at tested widths. |
+| Q-08 · next | Exercise the real narrow-width choose → compare → save/open → share journey; repair observed friction. | Record actual viewport sizes and results; no overflow or inaccessible essential actions at tested widths. |
 | Q-10 · ready | Can someone keep private trial observations and recover them without relying on this chat or one browser? Design a small portable feedback record. | A synthetic record survives save/open with design and context intact; no private feedback enters public assets or confers acceptance automatically. |
 | Q-12 · ready | Refresh the versioned offline recovery package after the recent study additions. | Build from a clean reviewed version bump, verify clean extraction and recovery, preserve existing tags/assets, and label exactly which features the release contains. |
 
@@ -39,24 +38,24 @@ solely to produce a commit.
 [Source](https://github.com/rana/inzone-profile-studio) ·
 [Offline packages](https://github.com/rana/inzone-profile-studio/releases/latest)
 
-Nine curated palettes; preview/comparison, paired drafts, favorites, save/open,
-portable public sharing and browser-local native preparation. Q-01, Q-04 and
-Q-05 passed their recorded software checks. Q-06 delivered named punctuation
-studies and safe draft recovery; Q-09's first frame study adds Glacier Gates.
-Q-11 now delivers [Solar Draft](docs/ALTERNATE-PALETTES.md): an untested amber-field
-alternate with white digits, green Win/Fn and a cool crown. It changes 61 colors,
-retaining 20. Thirty-seven app tests and eight packaging tests pass; synthetic
-conversion covers every catalog palette and study without losing protected fields.
-Actual browser checks cover exact colors, saved-file reopening from another
-reference, refresh/leave draft recovery and all five study identities. The earlier
-390px checks cover the refinement shelf; the full mobile journey remains pending.
-The gate revision adds 2/6/6-key comparisons and preserves the original 3-key
-Glacier in Earlier versions. Forty-one app tests and eight packaging tests pass.
-Actual browser checks cover exact colors, legacy-link recognition, prior-draft
-recovery and preventing trial feedback from transferring to edited colors. These are software results,
-not physical acceptance. See the research queue. Keep Amber
-Hinge + Rose and plain Amber Hinge intact. Private exports, photos and rollback
-records remain outside public Git and releases.
+Nine curated palettes, named studies, paired drafts, favorites, save/open,
+portable sharing and browser-local native preparation. [Solar Draft](docs/ALTERNATE-PALETTES.md)
+is an untested alternate mood; the [gate revisions](docs/FRAME-STUDIES.md) retain
+the original comparison and exact-study feedback. The research queue records
+their checked recovery, conversion and identity results.
+
+Q-07 delivers in-place comparison: Selected look and Reference switch the same
+board; a caption names the output target and the optional second board stays
+folded initially. Browser checks at 1280×720 confirm keyboard focus, read-only
+reference viewing, exact saved-file recovery and context resets. Palette downloads
+and synthetic native preparation are byte-identical from either viewing side.
+All 41 app tests, eight packaging tests, the public-data check and build pass.
+The share handlers still use selected colors; clipboard interaction was not
+retested in this run. Q-08 remains the full narrow-screen journey.
+
+Keep Amber Hinge + Rose and plain Amber Hinge intact. Private exports, photos
+and rollback records remain outside public Git and releases. Software results
+do not establish physical acceptance.
 
 RGB previews are not calibrated LED output; saved slot examples are not live
 state. The study shelf fits an actual 390px viewport without horizontal overflow;

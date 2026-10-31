@@ -23,6 +23,8 @@ let studyPreview: { colors: Record<string, string>; returnId: string } | null = 
 let selectedId = '';
 let selectedKey = 'SHIFT_L';
 let compareId = '';
+// Which board is displayed never changes the selected palette or export context.
+let compareSide: 'selected' | 'reference' = 'selected';
 let favorites = new Set<string>();
 let favoritesOnly = false;
 let view: 'preview' | 'compare' | 'edit' = 'preview';
@@ -124,7 +126,7 @@ function selectProfile(id: string): void {
   if (!palettes.has(id)) return;
   invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow();
   studyPreview = null;
-  selectedId = id; selectedKey = 'SHIFT_L';
+  selectedId = id; selectedKey = 'SHIFT_L'; compareSide = 'selected'; byId<HTMLDetailsElement>('both-boards').open = false;
   compareId = defaultComparisonId();
   updateUrl(); persist(); render(); inform('');
 }
@@ -135,7 +137,7 @@ function previewStudy(study: PaletteStudy): void {
   const returnId = studyPreview?.returnId || selectedId;
   invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow();
   selectedId = study.baseId; studyPreview = { colors, returnId };
-  selectedKey = Object.keys(study.changes)[0]!; compareId = study.baseId; view = 'compare';
+  selectedKey = Object.keys(study.changes)[0]!; compareId = study.baseId; view = 'compare'; compareSide = 'selected'; byId<HTMLDetailsElement>('both-boards').open = false;
   updateUrl(); render();
   byId('study-list').querySelector<HTMLButtonElement>(`[data-study="${study.id}"]`)?.focus({ preventScroll: true });
   inform(`${study.name} is a temporary preview. Your saved variation is unchanged. Save or share this study to keep it; “Leave preview” returns to your palette.`);
@@ -196,7 +198,7 @@ function drawKeyboard(container: HTMLElement, colors: Record<string, string>, ti
   const width = Math.max(260, Math.round(container.getBoundingClientRect().width));
   const unit = (width - 24) / 16.8; const height = unit * 6.85 + 24;
   const svg = svgEl('svg', { viewBox: `0 0 ${width} ${height}`, width, height, role: 'group', 'aria-label': `${title}, Sony US 81-key color preview` });
-  svg.append(svgEl('title', {}, title), svgEl('desc', {}, 'Colors are assigned RGB values, not calibrated LED output. Click a key or use the Choose key control to inspect it.'));
+  svg.append(svgEl('title', {}, title), svgEl('desc', {}, `Colors are assigned RGB values, not calibrated LED output. ${interactive ? 'Click a key or use the Choose key control to inspect it.' : 'Read-only reference preview. Return to Selected look to inspect or edit the selected palette.'}`));
   svg.append(svgEl('rect', { x: 2, y: 2, width: width - 4, height: height - 4, rx: 13, fill: '#101318' }));
   for (const key of layout) {
     const x = 12 + (key.x + .045) * unit, y = 12 + (key.y + .045) * unit, w = (key.w - .09) * unit, h = .91 * unit;
@@ -231,13 +233,26 @@ function drawKeyboard(container: HTMLElement, colors: Record<string, string>, ti
 function renderBoards(): void {
   const colors = currentColors(); const other = palettes.get(compareId);
   const differences = other ? colorDifferences(colors, other.key_colors) : [];
-  drawKeyboard(byId('keyboard'), colors, selectedCandidate().name, true, view === 'compare' ? differences : []);
-  if (view === 'compare' && other) drawKeyboard(byId('compare-keyboard'), other.key_colors, other.name, false, differences);
-  byId('compare-result').textContent = `${differences.length} ${differences.length === 1 ? 'key differs' : 'keys differ'}. Dots mark the differences on both previews.`;
+  const referenceVisible = view === 'compare' && compareSide === 'reference' && !!other;
+  const selectedName = selectedCandidate().name;
+  const shownName = referenceVisible ? other!.name : selectedName;
+  drawKeyboard(byId('keyboard'), referenceVisible ? other!.key_colors : colors, shownName, !referenceVisible, view === 'compare' ? differences : []);
+  const bothBoards = byId<HTMLDetailsElement>('both-boards');
+  if (view === 'compare' && bothBoards.open && other) drawKeyboard(byId('compare-keyboard'), other.key_colors, other.name, false, differences);
+  byId('compare-result').textContent = `${differences.length} ${differences.length === 1 ? 'key differs' : 'keys differ'}. Dots mark the changed keys.`;
+  byId('compare-selected').setAttribute('aria-pressed', String(!referenceVisible));
+  byId('compare-reference').setAttribute('aria-pressed', String(referenceVisible));
+  byId<HTMLButtonElement>('compare-reference').disabled = !other;
+  const caption = `Viewing ${referenceVisible ? 'reference' : 'selected look'}: ${shownName}. Save, share and use on keyboard target ${selectedName}.`;
+  const captionNode = byId('compare-view-caption');
+  if (captionNode.textContent !== caption) captionNode.textContent = caption;
+  byId('key-inspector').hidden = referenceVisible;
+  const changed = colorDifferences(currentBase().key_colors, colors);
+  byId('draft-state').textContent = referenceVisible ? `Reference · ${other!.name}` : changed.length ? `${currentStudy()?.name || (studyPreview ? 'Temporary variation' : 'Your variation')} · ${changed.length} ${changed.length === 1 ? 'key changed' : 'keys changed'}` : 'Original palette';
   const list = byId('comparison-changes'); list.replaceChildren();
   if (view === 'compare' && other) for (const id of differences) {
     const item = el('li'); item.append(el('strong', '', nameOf(layout.find(key => key.id === id)!)));
-    for (const [label, color] of [['Reference', other.key_colors[id]!], ['Preview', colors[id]!]]) {
+    for (const [label, color] of [['Reference', other.key_colors[id]!], ['Selected', colors[id]!]]) {
       const value = el('span', 'change-color'); const sample = el('i'); sample.style.backgroundColor = color!; sample.setAttribute('aria-hidden', 'true');
       value.append(sample, el('span', '', `${label}: ${color}`)); item.append(value);
     }
@@ -256,7 +271,6 @@ function renderInspector(): void {
   byId<HTMLInputElement>('key-color').value = editColor;
   byId<HTMLInputElement>('hex-color').value = editColor;
   const changed = colorDifferences(currentBase().key_colors, currentColors());
-  byId('draft-state').textContent = changed.length ? `${currentStudy()?.name || (studyPreview ? 'Temporary variation' : 'Your variation')} · ${changed.length} ${changed.length === 1 ? 'key changed' : 'keys changed'}` : 'Original palette';
   byId<HTMLButtonElement>('reset-draft').disabled = !changed.length;
   byId<HTMLButtonElement>('reset-key').disabled = currentColors()[selectedKey] === currentBase().key_colors[selectedKey];
 }
@@ -278,10 +292,11 @@ function renderProfileContext(): void {
     : edited ? 'Local variation' : statusNames[meta.status];
 }
 function render(): void {
+  if (view !== 'compare') { compareSide = 'selected'; byId<HTMLDetailsElement>('both-boards').open = false; }
   renderCatalog(); renderProfileContext(); renderStudies();
   const star = byId<HTMLButtonElement>('favorite'); star.setAttribute('aria-pressed', String(favorites.has(selectedId))); star.textContent = favorites.has(selectedId) ? '★ Saved favorite' : '☆ Save favorite';
   star.disabled = !!studyPreview && colorDifferences(currentBase().key_colors, currentColors()).length > 0; star.title = star.disabled ? 'Save this study as a palette file or share its link. Favorites mark published originals.' : '';
-  byId('compare-section').hidden = view !== 'compare'; byId('edit-section').hidden = view !== 'edit';
+  byId('compare-controls').hidden = view !== 'compare'; byId('compare-section').hidden = view !== 'compare'; byId('edit-section').hidden = view !== 'edit';
   for (const button of document.querySelectorAll<HTMLButtonElement>('[data-view]')) button.setAttribute('aria-pressed', String(button.dataset.view === view));
   const compare = byId<HTMLSelectElement>('compare-profile'); compare.replaceChildren();
   for (const profile of catalog.profiles) {
@@ -292,6 +307,7 @@ function render(): void {
   renderInspector(); requestAnimationFrame(renderBoards);
 }
 function applyEdit(keys: string[], color: string): void {
+  compareSide = 'selected';
   invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow();
   try {
     const colors = recolor(currentColors(), keys, color); validateColors(colors, layout);
@@ -323,7 +339,7 @@ async function openPaletteFile(): Promise<void> {
     const knownId = exactId || (draftBase && palettes.has(draftBase) ? draftBase : undefined);
     const baseId = knownId || sourceId;
     invalidateSharing(); closeNativeWorkflow();
-    studyPreview = null; selectedId = baseId; selectedKey = 'SHIFT_L';
+    studyPreview = null; selectedId = baseId; selectedKey = 'SHIFT_L'; compareSide = 'selected'; byId<HTMLDetailsElement>('both-boards').open = false;
     const matchesOriginal = colorDifferences(currentBase().key_colors, imported.colors).length === 0;
     if (matchesOriginal) drafts.delete(baseId);
     else drafts.set(baseId, { ...imported.colors });
@@ -437,9 +453,10 @@ function createShell(): void {
         <div class="profile-heading"><div><span class="status-tag" id="profile-status"></span><h2 id="profile-title"></h2><p id="profile-summary"></p></div><div class="profile-heading-actions"><button type="button" id="favorite" class="quiet-button" aria-pressed="false"></button><button type="button" id="use-profile" class="primary-button">Use on my keyboard</button></div></div>
         <details id="studies" class="study-shelf"><summary>Explore studies <span>Alternate palettes and refinements</span></summary><p>Each study explores a stated design question. Physical feedback is noted where available. Previewing keeps your saved variation intact.</p><div id="study-list" class="study-groups"></div><div class="study-followup"><p id="study-question"></p><button type="button" id="leave-study" class="quiet-button" hidden>Leave preview · return to my palette</button></div></details>
         <div class="workbench-toolbar"><div class="view-switch" role="group" aria-label="Preview tools"><button type="button" data-view="preview" aria-pressed="true">Preview</button><button type="button" data-view="compare" aria-pressed="false">Compare</button><button type="button" data-view="edit" aria-pressed="false">Make a variation</button></div><label class="swatch-toggle"><input type="checkbox" id="swatches" checked> Full color swatches</label></div>
-        <section class="keyboard-section" aria-label="Selected palette preview"><div id="keyboard" class="keyboard-stage"></div><div class="preview-caption"><span id="draft-state"></span><span>81 keys lit · 100% brightness · preview only</span></div></section>
-        <section id="compare-section" class="compare-section" hidden><div class="section-heading"><label>Compare with<select id="compare-profile"></select></label><p id="compare-result"></p></div><div id="compare-keyboard" class="keyboard-stage"></div><ul id="comparison-changes" class="comparison-changes" aria-label="Exact color differences"></ul></section>
-        <section class="inspector" aria-label="Selected key"><span id="selected-key-swatch" class="selected-swatch" aria-hidden="true"></span><div class="selected-description"><strong id="selected-key-name"></strong><code id="selected-key-color"></code></div><label class="choose-key">Choose key<select id="key-select"></select></label><span class="inspector-tip">Click a key to inspect its color.</span></section>
+        <section id="compare-controls" class="compare-controls" aria-label="Compare in place" hidden><div class="compare-toolbar"><label>Compare with<select id="compare-profile"></select></label><div class="compare-side" role="group" aria-label="Board to view"><button type="button" id="compare-selected" aria-pressed="true">Selected look</button><button type="button" id="compare-reference" aria-pressed="false">Reference</button></div></div><p id="compare-view-caption" class="compare-view-caption" role="status" aria-live="polite"></p></section>
+        <section class="keyboard-section" aria-label="Keyboard color preview"><div id="keyboard" class="keyboard-stage"></div><div class="preview-caption"><span id="draft-state"></span><span>81 keys lit · 100% brightness · preview only</span></div></section>
+        <section id="compare-section" class="compare-section" hidden><p id="compare-result"></p><ul id="comparison-changes" class="comparison-changes" aria-label="Exact color differences"></ul><details id="both-boards" class="reference-board"><summary>Show reference board below</summary><div id="compare-keyboard" class="keyboard-stage"></div></details></section>
+        <section id="key-inspector" class="inspector" aria-label="Selected key"><span id="selected-key-swatch" class="selected-swatch" aria-hidden="true"></span><div class="selected-description"><strong id="selected-key-name"></strong><code id="selected-key-color"></code></div><label class="choose-key">Choose key<select id="key-select"></select></label><span class="inspector-tip">Click a key to inspect its color.</span></section>
         <section id="edit-section" class="edit-section" hidden><div><h3>Make it yours</h3><p>Work on a local variation. The original stays intact.</p></div><div class="edit-controls"><label>Apply color to<select id="edit-target"><option value="selected">Selected key</option><option value="shift">Both Shift keys</option><option value="hinge">Win and Fn</option><option value="ctrl">Both Ctrl keys</option><option value="alt">Both Alt keys</option><option value="gates">Tab and Enter</option></select></label><label>Color<input id="key-color" type="color" value="#FF0080"></label><label>Hex<input id="hex-color" value="#FF0080" maxlength="7" spellcheck="false" autocomplete="off"></label><button type="button" id="apply-color">Apply color</button></div><div class="edit-footer"><p>Ctrl, Alt and Shift pairs stay matched. Every key stays illuminated.</p><button type="button" id="reset-key" class="text-button">Restore selected key</button><button type="button" id="reset-draft" class="text-button">Restore this palette</button></div></section>
         <div class="action-bar"><button type="button" id="share-profile" class="quiet-button">Copy share link</button><button type="button" id="download-palette" class="quiet-button">Save palette</button><button type="button" id="open-palette" class="quiet-button" aria-describedby="palette-file-help">Open palette JSON</button><input type="file" id="palette-file" accept=".json,application/json" aria-label="Open palette design JSON" hidden><button type="button" id="copy-request" class="text-button">Copy assistant request</button></div>
         <section id="share-panel" class="share-panel" aria-label="Share this palette" hidden><label for="public-share-link">Public share link</label><div class="share-link-row"><input id="public-share-link" type="url" readonly spellcheck="false" aria-describedby="public-share-help"><a id="open-shared-preview" target="_blank" rel="noopener">Open shared preview ↗</a></div><p id="public-share-help">The recipient opens the public studio online. This link carries all 81 colors, not native exports.</p></section>
@@ -459,7 +476,10 @@ function wireEvents(): void {
   byId('favorites-filter').addEventListener('click', () => { favoritesOnly = !favoritesOnly; renderCatalog(); });
   byId('favorite').addEventListener('click', () => { favorites.has(selectedId) ? favorites.delete(selectedId) : favorites.add(selectedId); persist(); render(); });
   document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(button => button.addEventListener('click', () => { view = button.dataset.view as typeof view; render(); }));
-  byId<HTMLSelectElement>('compare-profile').addEventListener('change', event => { compareId = (event.target as HTMLSelectElement).value; renderBoards(); });
+  byId<HTMLSelectElement>('compare-profile').addEventListener('change', event => { compareId = (event.target as HTMLSelectElement).value; compareSide = 'selected'; renderBoards(); });
+  byId('compare-selected').addEventListener('click', () => { compareSide = 'selected'; renderBoards(); });
+  byId('compare-reference').addEventListener('click', () => { compareSide = 'reference'; renderBoards(); });
+  byId('both-boards').addEventListener('toggle', () => renderBoards());
   byId<HTMLInputElement>('swatches').addEventListener('change', event => { swatches = (event.target as HTMLInputElement).checked; renderBoards(); });
   byId<HTMLSelectElement>('key-select').addEventListener('change', event => { selectedKey = (event.target as HTMLSelectElement).value; renderInspector(); renderBoards(); });
   byId('edit-target').addEventListener('change', () => { invalidatePaletteRead(); invalidateSharing(); renderInspector(); });
@@ -467,16 +487,16 @@ function wireEvents(): void {
   byId('hex-color').addEventListener('input', () => { invalidatePaletteRead(); invalidateSharing(); });
   byId('apply-color').addEventListener('click', () => { const group = byId<HTMLSelectElement>('edit-target').value; applyEdit(group === 'selected' ? [selectedKey] : groupKeys[group]!, byId<HTMLInputElement>('hex-color').value); });
   byId('reset-key').addEventListener('click', () => applyEdit([selectedKey], currentBase().key_colors[selectedKey]!));
-  byId('reset-draft').addEventListener('click', () => { invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow(); if (studyPreview) studyPreview.colors = { ...currentBase().key_colors }; else drafts.delete(selectedId); updateUrl(); persist(); render(); inform(studyPreview ? 'Previewing the original. Your saved variation is unchanged; “Leave preview” returns to it.' : 'Original palette restored.'); });
+  byId('reset-draft').addEventListener('click', () => { compareSide = 'selected'; invalidatePaletteRead(); invalidateSharing(); closeNativeWorkflow(); if (studyPreview) studyPreview.colors = { ...currentBase().key_colors }; else drafts.delete(selectedId); updateUrl(); persist(); render(); inform(studyPreview ? 'Previewing the original. Your saved variation is unchanged; “Leave preview” returns to it.' : 'Original palette restored.'); });
   byId('share-profile').addEventListener('click', () => shareCurrentPalette(false));
   byId<HTMLInputElement>('public-share-link').addEventListener('focus', event => (event.target as HTMLInputElement).select());
-  byId('open-palette').addEventListener('click', () => { invalidatePaletteRead(); invalidateSharing(); inform('Choose a palette design JSON file. Sony native exports use the separate native workflow.'); byId<HTMLInputElement>('palette-file').click(); });
+  byId('open-palette').addEventListener('click', () => { compareSide = 'selected'; renderBoards(); invalidatePaletteRead(); invalidateSharing(); inform('Choose a palette design JSON file. Sony native exports use the separate native workflow.'); byId<HTMLInputElement>('palette-file').click(); });
   byId('palette-file').addEventListener('change', () => { void openPaletteFile(); });
   byId('palette-file').addEventListener('cancel', () => { invalidatePaletteRead(); inform('No palette opened. The current preview is unchanged.'); });
   byId('download-palette').addEventListener('click', () => { const candidate = selectedCandidate(); download(JSON.stringify(candidate, null, 2) + '\n', `${candidateFilename()}.json`); inform('Palette saved. Reopen it with “Open palette JSON”. To prepare a Sony import, choose “Use on my keyboard”.'); });
   byId('copy-request').addEventListener('click', () => shareCurrentPalette(true));
   const dialog = byId<HTMLDialogElement>('export-dialog');
-  byId('use-profile').addEventListener('click', () => { invalidatePaletteRead(); invalidateSharing(); clearExport(); dialog.showModal(); });
+  byId('use-profile').addEventListener('click', () => { compareSide = 'selected'; renderBoards(); invalidatePaletteRead(); invalidateSharing(); clearExport(); dialog.showModal(); });
   byId('close-export').addEventListener('click', () => { clearExport(); dialog.close(); });
   dialog.addEventListener('cancel', () => clearExport());
   dialog.addEventListener('close', () => { if (!dialog.open) clearExport(); });

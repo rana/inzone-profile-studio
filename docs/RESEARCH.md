@@ -9,8 +9,7 @@ Missing participant evidence blocks its own trial, not the ready track.
 
 | ID / state | Question | Next bounded action | Completion evidence |
 | --- | --- | --- | --- |
-| Q-07 · next | Can subtle differences be understood without scanning two entire boards? | Investigate in-place A/B comparison; Q-06 already delivered the readable changed-key list with before/after swatches. Keep the actual selected design distinct from the temporarily viewed reference. | Pointer and keyboard journeys identify the changes; preview toggling cannot silently change sharing, saving or native preparation. |
-| Q-08 · ready | Can a family member use the essential journey on a smaller screen? | Test actual narrow viewports through choose → compare → save/open → share. Repair observed friction, including lost context or inaccessible controls. | Record actual viewport dimensions, essential actions, overflow and focus results. A requested viewport override alone is insufficient evidence. |
+| Q-08 · next | Can a family member use the essential journey on a smaller screen? | Test actual narrow viewports through choose → compare → save/open → share. Repair observed friction, including lost context or inaccessible controls. | Record actual viewport dimensions, essential actions, overflow and focus results. A requested viewport override alone is insufficient evidence. |
 | Q-10 · ready | Can private trial feedback survive the loss of a chat or browser? | Design a small portable observation record: design identity, room context, distinction/readability result and preference. Use synthetic data to test recovery. | Save/open preserves context and design association. Private records are opt-in and remain outside public assets; a record cannot automatically promote a palette to accepted. |
 | Q-12 · ready | Can the latest studies be recovered offline as easily as the older release? | Produce a new versioned recovery release from clean reviewed source after the recent study additions; never replace existing published assets. | Clean extraction serves the exact bundled assets, saved palette recovery works, version/source identity and checksums agree, and the release explicitly states its included features. |
 
@@ -20,6 +19,37 @@ physical test before investigating independent opportunities. When the ready
 queue is exhausted, inspect the user journey and relevant primary references to
 propose the next small questions. Avoid random palette generation, feature
 accumulation and repeated checks of unchanged software.
+
+## Completed in-place comparison
+
+**Q-07: can subtle differences be understood without scrolling between boards?**
+The selected look and reference now share one board position, with an explicit
+view switch. The changed-key list retains both exact colors; a folded reference
+board remains available for readers who prefer two boards.
+
+The design decision developed with Claude separates the displayed reference
+from the selected design. Switching sides changes rendering only, while a
+caption names the look used by Save, Share and Use on my keyboard. The reference
+is read-only; returning to the selected look restores its key inspector. Editing,
+changing designs or opening native preparation returns to the selected side.
+There is no automatic animation: the reader controls when the comparison changes.
+
+Browser checks at an actual 1280×720 viewport confirm pointer and Enter-key
+switching, retained button focus, a hidden inspector and noninteractive reference
+keys. Changing the reference, entering editing/native preparation, selecting a
+study and opening a saved file restore selected viewing. The optional second
+board starts folded and renders all 81 reference keys when opened. Operator Ice's
+four exact differences and Solar Draft's 61 remain identifiable.
+
+Saving while viewing either side produced byte-identical Operator Ice palette
+files. A downloaded file reopened with all 81 colors exact. Native preparation
+entered from either viewing side produced byte-identical outputs from a wholly
+synthetic source; comparison against the converter confirmed every field and
+protected-setting preservation. No device connection or hardware change was used.
+Source review confirms sharing and assistant requests still use selected colors;
+clipboard interaction was deliberately not repeated in this run. The full mobile
+journey remains Q-08. All 41 app tests, eight packaging tests, the public-data
+check and production build pass. These are software results, not physical trials.
 
 ## Participant and device investigations
 

@@ -40,6 +40,12 @@ Choose a palette to relight the on-screen board. Inspect a key, share the select
 look, or open the secondary comparison and draft tools. Previewing never writes
 the keyboard. A downloaded palette is a design file, not a Sony native import.
 
+In **Compare**, switch between **Selected look** and **Reference** in the same
+board position. Dots and the exact-color list identify changed keys. The caption
+always names the look used for saving, sharing and native preparation; viewing a
+reference does not select it. **Show reference board below** opens a second board
+when useful.
+
 Use **Save palette** to keep a design JSON, then **Open palette JSON** to recover
 it later. Opening validates all 81 illuminated keys and matched modifier pairs.
 Changed colors become a local variation with a comparison to the published
