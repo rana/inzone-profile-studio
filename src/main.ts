@@ -143,16 +143,24 @@ function previewStudy(study: PaletteStudy): void {
 function renderStudies(): void {
   const study = currentStudy();
   const list = byId('study-list'); list.replaceChildren();
+  const studyButton = (item: PaletteStudy): HTMLButtonElement => {
+    const button = el('button', 'study-choice'); button.type = 'button';
+    button.dataset.study = item.id; button.setAttribute('aria-pressed', String(study?.id === item.id));
+    const samples = el('span', 'study-samples'); samples.setAttribute('aria-hidden', 'true');
+    [...new Set(Object.values(item.changes))].forEach(color => { const sample = el('i'); sample.style.backgroundColor = color; samples.append(sample); });
+    const count = Object.keys(item.changes).length;
+    button.append(samples, el('strong', '', item.name), el('span', 'study-count', `${count} ${count === 1 ? 'key' : 'keys'}`), el('span', 'study-summary', item.summary));
+    button.addEventListener('click', () => previewStudy(item)); return button;
+  };
   for (const [family, title] of [['palette', 'Alternate palettes'], ['frame', 'Command frame'], ['punctuation', 'Punctuation landmarks']]) {
     const group = el('section', 'study-family'); group.append(el('h3', '', title!));
     const choices = el('div', 'study-list'); group.append(choices); list.append(group);
-    for (const item of ALL_STUDIES.filter(item => item.family === family)) {
-      const button = el('button', 'study-choice'); button.type = 'button';
-      button.dataset.study = item.id; button.setAttribute('aria-pressed', String(study?.id === item.id));
-      const samples = el('span', 'study-samples'); samples.setAttribute('aria-hidden', 'true');
-      [...new Set(Object.values(item.changes))].forEach(color => { const sample = el('i'); sample.style.backgroundColor = color; samples.append(sample); });
-      button.append(samples, el('strong', '', item.name), el('span', 'study-count', `${Object.keys(item.changes).length} ${Object.keys(item.changes).length === 1 ? 'key' : 'keys'}`), el('span', 'study-summary', item.summary));
-      button.addEventListener('click', () => previewStudy(item)); choices.append(button);
+    for (const item of ALL_STUDIES.filter(item => item.family === family && !item.archived)) choices.append(studyButton(item));
+    const archived = ALL_STUDIES.filter(item => item.family === family && item.archived);
+    if (archived.length) {
+      const history = el('details', 'study-archive'); history.open = !!study?.archived;
+      const olderChoices = el('div', 'study-list'); archived.forEach(item => olderChoices.append(studyButton(item)));
+      history.append(el('summary', '', 'Earlier versions'), olderChoices); group.append(history);
     }
   }
   byId('leave-study').hidden = !studyPreview;
@@ -259,11 +267,15 @@ function renderProfileContext(): void {
   byId('profile-title').textContent = study?.name || (edited ? `${meta.name} — your variation` : meta.name);
   byId('profile-summary').textContent = study?.summary || meta.summary;
   byId('profile-acceptance').textContent = study
-    ? `Untested ${study.family === 'palette' ? 'alternate-palette' : study.family === 'frame' ? 'command-frame' : 'punctuation'} study of ${meta.name}. Compare at typing distance before deciding whether to keep it. Previewing does not change your keyboard.`
+    ? study.trial
+      ? `${study.trial.note} Source palette: ${meta.name}. Feedback applies to this exact study; previewing does not change your keyboard.`
+      : `Proposed ${study.family === 'palette' ? 'alternate-palette' : study.family === 'frame' ? 'command-frame' : 'punctuation'} study of ${meta.name}. No physical verdict is recorded for this exact look. Previewing does not change your keyboard.`
     : edited
     ? `This local variation has not been physically tested. Source palette: ${meta.name}. ${meta.acceptance || ''}`
     : meta.acceptance || statusNames[meta.status];
-  byId('profile-status').textContent = study ? 'Study · not physically tested' : edited ? 'Local variation' : statusNames[meta.status];
+  byId('profile-status').textContent = study
+    ? study.trial?.status === 'liked' ? 'Study · liked in one physical trial' : study.trial?.status === 'revision-requested' ? 'Study · revision requested' : 'Study · no physical verdict'
+    : edited ? 'Local variation' : statusNames[meta.status];
 }
 function render(): void {
   renderCatalog(); renderProfileContext(); renderStudies();
@@ -423,7 +435,7 @@ function createShell(): void {
       <aside class="catalog" aria-label="Profile collection"><div class="catalog-heading"><h1>Your next favorite.</h1><p>Readable light. A few useful landmarks.</p></div><button type="button" id="favorites-filter" class="filter-button" aria-pressed="false">My favorites</button><label class="mobile-profile">Choose a profile<select id="mobile-profile"></select></label><nav id="profile-list" class="profile-list" aria-label="Choose a profile"></nav><p class="catalog-note">Curated acceptance describes physical trials. Your saved favorites belong to this browser.</p></aside>
       <main id="workbench" class="workbench">
         <div class="profile-heading"><div><span class="status-tag" id="profile-status"></span><h2 id="profile-title"></h2><p id="profile-summary"></p></div><div class="profile-heading-actions"><button type="button" id="favorite" class="quiet-button" aria-pressed="false"></button><button type="button" id="use-profile" class="primary-button">Use on my keyboard</button></div></div>
-        <details id="studies" class="study-shelf"><summary>Explore studies <span>Alternate palettes and refinements</span></summary><p>Each study explores a stated design question. These previews are untested on hardware and keep your saved variation intact.</p><div id="study-list" class="study-groups"></div><div class="study-followup"><p id="study-question"></p><button type="button" id="leave-study" class="quiet-button" hidden>Leave preview · return to my palette</button></div></details>
+        <details id="studies" class="study-shelf"><summary>Explore studies <span>Alternate palettes and refinements</span></summary><p>Each study explores a stated design question. Physical feedback is noted where available. Previewing keeps your saved variation intact.</p><div id="study-list" class="study-groups"></div><div class="study-followup"><p id="study-question"></p><button type="button" id="leave-study" class="quiet-button" hidden>Leave preview · return to my palette</button></div></details>
         <div class="workbench-toolbar"><div class="view-switch" role="group" aria-label="Preview tools"><button type="button" data-view="preview" aria-pressed="true">Preview</button><button type="button" data-view="compare" aria-pressed="false">Compare</button><button type="button" data-view="edit" aria-pressed="false">Make a variation</button></div><label class="swatch-toggle"><input type="checkbox" id="swatches" checked> Full color swatches</label></div>
         <section class="keyboard-section" aria-label="Selected palette preview"><div id="keyboard" class="keyboard-stage"></div><div class="preview-caption"><span id="draft-state"></span><span>81 keys lit · 100% brightness · preview only</span></div></section>
         <section id="compare-section" class="compare-section" hidden><div class="section-heading"><label>Compare with<select id="compare-profile"></select></label><p id="compare-result"></p></div><div id="compare-keyboard" class="keyboard-stage"></div><ul id="comparison-changes" class="comparison-changes" aria-label="Exact color differences"></ul></section>

@@ -24,10 +24,12 @@ their own fresh Sony export when preparing an import.
 Open **Explore studies** for alternate palettes and focused keeper refinements.
 [Solar Draft](docs/ALTERNATE-PALETTES.md) explores amber writing beneath a cool
 function-row crown; its green Win/Fn pair and white digits create a different mood.
-[Glacier Gates](docs/FRAME-STUDIES.md) tests three white command keys while the
-green writing field and established colored landmarks stay fixed. Each choice
-compares its exact changed keys against Amber Hinge + Rose. Studies
-remain untested on hardware. Browsing, editing and refreshing a trial preserve
+[Glacier Gates](docs/FRAME-STUDIES.md) now keeps only Tab and Enter white, with
+Caps restored to violet. Glacier Union combines those gates with four white
+operator keys; Glacier Syntax keeps the gates white and makes those operators
+blue. Earlier versions remain under **Earlier versions**. Each choice compares
+its exact colors with Amber Hinge + Rose. Physical feedback is noted for exact
+studies where available; new combinations remain untested. Browsing, editing and refreshing a trial preserve
 your saved variation; **Leave preview** returns to it. Save or share a trial to
 keep it independently. Study names are recognized only while every color matches
 the proposal, and downloads use distinct study filenames.

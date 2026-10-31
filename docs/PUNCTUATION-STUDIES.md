@@ -1,6 +1,6 @@
 # Punctuation studies
 
-Three proposed variations of Amber Hinge + Rose. They change punctuation only; the green letters and Space, blue tilde, mint brackets, modifiers and F-row remain as accepted. None has been installed or physically evaluated.
+Three proposed variations of Amber Hinge + Rose. They change punctuation only; the green letters and Space, blue tilde, mint brackets, modifiers and F-row remain as accepted. Operator Ice was liked in a physical trial and chosen for the moment. No separate all-legends readability verdict was recorded. Pale Quote and Three-Role Split remain untested.
 
 | Preview | Changes | Intent |
 | --- | --- | --- |

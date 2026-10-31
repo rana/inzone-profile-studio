@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { colorDifferences, colorsFromUrl, makeCandidate, publicShareUrl, validateColors } from './model';
 import { parsePaletteBytes } from './palette-file';
 import { ALL_STUDIES, ALTERNATE_STUDIES, applyStudy, FRAME_STUDIES, matchingStudy, PUNCTUATION_STUDIES } from './studies';
@@ -40,10 +41,12 @@ test('documented punctuation studies change exactly 1, 4 and 8 keys without alte
   assert.deepEqual(base.key_colors, untouched);
 });
 
-test('Glacier Gates changes only the three command keys and preserves every learned landmark', () => {
-  assert.equal(FRAME_STUDIES.length, 1);
-  const study = FRAME_STUDIES[0]!;
+test('the archived three-key Glacier Gates retains its exact colors and old URL identity', () => {
+  assert.deepEqual(FRAME_STUDIES.map(study => study.id), ['glacier-gates-v2', 'glacier-union', 'glacier-syntax', 'glacier-gates']);
+  const study = FRAME_STUDIES.find(study => study.id === 'glacier-gates')!;
   assert.equal(study.id, 'glacier-gates');
+  assert.equal(study.name, 'Glacier Gates Original');
+  assert.equal(study.archived, true);
   assert.equal(study.family, 'frame');
   assert.equal(study.baseId, base.id);
   assert.deepEqual(study.changes, { TAB: '#FFFFFF', CAP: '#FFFFFF', ENTER: '#FFFFFF' });
@@ -55,8 +58,66 @@ test('Glacier Gates changes only the three command keys and preserves every lear
   validateColors(colors, layout);
   assert.equal(Object.keys(colors).length, 81);
   assert.equal(Object.values(colors).every(color => color !== '#000000'), true);
+  const sortedColors = Object.fromEntries(Object.keys(colors).sort().map(key => [key, colors[key]]));
+  assert.equal(createHash('sha256').update(JSON.stringify(sortedColors)).digest('hex'), 'f01f5700e06ec56b049f64c4c08aecae20d0c480c53decb74e05cf7f2df8a686');
+  const oldUrl = 'https://rana.github.io/inzone-profile-studio/?profile=amber-hinge-rose&colors=TAB.FFFFFF%2CCAP.FFFFFF%2CENTER.FFFFFF';
+  const oldColors = colorsFromUrl(oldUrl, base.key_colors, layout);
+  assert.deepEqual(oldColors, colors);
+  assert.equal(matchingStudy(base.id!, oldColors, base.key_colors, layout)?.id, study.id);
   assert.equal(new Set(ALL_STUDIES.map(item => item.id)).size, ALL_STUDIES.length);
   assert.deepEqual(ALL_STUDIES, [...PUNCTUATION_STUDIES, ...FRAME_STUDIES, ...ALTERNATE_STUDIES]);
+});
+
+test('current Glacier refinements change exactly 2, 6 and 6 keys while Caps and all other keys retain the keeper colors', () => {
+  const expected: Record<string, Record<string, string>> = {
+    'glacier-gates-v2': { TAB: '#FFFFFF', ENTER: '#FFFFFF' },
+    'glacier-union': { TAB: '#FFFFFF', ENTER: '#FFFFFF', MINUS: '#FFFFFF', PLUS: '#FFFFFF', SLASH: '#FFFFFF', BACK_SLASH: '#FFFFFF' },
+    'glacier-syntax': { TAB: '#FFFFFF', ENTER: '#FFFFFF', MINUS: '#00A0FF', PLUS: '#00A0FF', SLASH: '#00A0FF', BACK_SLASH: '#00A0FF' },
+  };
+  const original = structuredClone(base.key_colors);
+  const active = FRAME_STUDIES.filter(study => !study.archived);
+  assert.deepEqual(active.map(study => study.id), Object.keys(expected));
+  for (const study of active) {
+    assert.deepEqual(study.changes, expected[study.id]);
+    const colors = applyStudy(study, base.key_colors, layout);
+    const changedKeys = Object.keys(expected[study.id]!);
+    assert.deepEqual(colorDifferences(original, colors).sort(), changedKeys.sort());
+    assert.equal(Object.keys(original).length - changedKeys.length, study.id === 'glacier-gates-v2' ? 79 : 75);
+    for (const key of Object.keys(original)) assert.equal(colors[key], expected[study.id]![key] || original[key]);
+    assert.equal(colors.CAP, '#B000FF');
+    validateColors(colors, layout);
+    assert.equal(Object.keys(colors).length, 81);
+    assert.equal(Object.values(colors).every(color => color !== '#000000'), true);
+    assert.equal(colors.CTRL_L, colors.CTRL_R);
+    assert.equal(colors.ALT_L, colors.ALT_R);
+    assert.equal(colors.SHIFT_L, colors.SHIFT_R);
+  }
+  assert.deepEqual(base.key_colors, original);
+  const union = applyStudy(active.find(study => study.id === 'glacier-union')!, original, layout);
+  const syntax = applyStudy(active.find(study => study.id === 'glacier-syntax')!, original, layout);
+  assert.deepEqual(colorDifferences(union, syntax).sort(), ['BACK_SLASH', 'MINUS', 'PLUS', 'SLASH']);
+});
+
+test('all three current Glacier candidate files and documented previews match their complete study colors', () => {
+  const document = readFileSync(new URL('../docs/FRAME-STUDIES.md', import.meta.url), 'utf8');
+  for (const study of FRAME_STUDIES.filter(study => !study.archived)) {
+    const candidate = JSON.parse(readFileSync(new URL(`../public/data/studies/${study.id}.json`, import.meta.url), 'utf8')) as Candidate;
+    const colors = applyStudy(study, base.key_colors, layout);
+    assert.deepEqual(candidate.key_colors, colors);
+    assert.equal(candidate.id, 'amber-hinge-rose-draft');
+    assert.equal(candidate.name, study.name);
+    assert.equal(candidate.brightness_percent, 100);
+    assert.equal(candidate.brightness_level, 10);
+    assert.equal(Object.hasOwn(candidate, 'acceptance'), false);
+    assert.equal(Object.hasOwn(candidate, 'status'), false);
+    const reopened = parsePaletteBytes(new TextEncoder().encode(JSON.stringify(candidate)), layout);
+    assert.equal(reopened.id, 'amber-hinge-rose-draft');
+    assert.deepEqual(reopened.colors, colors);
+    assert.equal(matchingStudy(base.id!, reopened.colors, base.key_colors, layout)?.id, study.id);
+    const preview = document.match(new RegExp(`\\[Preview ${study.name}\\]\\(([^)]+)\\)`))?.[1];
+    assert.ok(preview, `${study.name} has a documented preview link.`);
+    assert.deepEqual(colorsFromUrl(preview, base.key_colors, layout), colors);
+  }
 });
 
 test('Solar Draft defines a complete alternate mood with exactly 61 changed and 20 preserved keys', () => {
@@ -133,6 +194,40 @@ test('study identity requires the correct reference and every exact color, not a
     assert.equal(matchingStudy('another-reference', colors, base.key_colors, layout), undefined);
     assert.equal(matchingStudy(base.id!, { ...colors, Q: '#00FF80' }, base.key_colors, layout), undefined);
   }
+});
+
+test('physical feedback is attached only to the exact observed study and does not transfer to revisions', () => {
+  const observations = [
+    ['operator-ice', 'liked'],
+    ['glacier-gates', 'revision-requested'],
+    ['glacier-union', 'revision-requested'],
+  ] as const;
+  for (const [id, status] of observations) {
+    const study = ALL_STUDIES.find(item => item.id === id)!;
+    const colors = applyStudy(study, base.key_colors, layout);
+    const matched = matchingStudy(base.id!, colors, base.key_colors, layout);
+    assert.equal(matched?.trial?.status, status);
+    if (id === 'glacier-union') assert.equal(matched?.trial?.note, 'In the combined trial, white Tab felt out of place; standalone Operator Ice was chosen for the moment.');
+    else assert.ok(matched?.trial?.note.toLowerCase().includes('legend readability was not separately confirmed.'));
+    if (id === 'operator-ice') assert.ok(matched?.trial?.note.includes('chosen for the moment'));
+    assert.equal(matchingStudy(base.id!, { ...colors, Q: '#00FF80' }, base.key_colors, layout), undefined);
+    assert.equal(matchingStudy('another-reference', colors, base.key_colors, layout), undefined);
+  }
+  for (const id of ['glacier-gates-v2', 'glacier-syntax']) assert.equal(FRAME_STUDIES.find(study => study.id === id)!.trial, undefined);
+  assert.equal(ALTERNATE_STUDIES[0]!.trial, undefined);
+});
+
+test('exported and opened palette data cannot inherit or confer trial status or acceptance', () => {
+  const observed = PUNCTUATION_STUDIES.find(study => study.id === 'operator-ice')!;
+  const colors = applyStudy(observed, base.key_colors, layout);
+  const taintedBase = { ...base, trial: observed.trial, status: 'accepted', acceptance: 'Do not inherit this claim.' };
+  const candidate = makeCandidate(taintedBase, colors, layout);
+  for (const key of ['trial', 'status', 'acceptance']) assert.equal(Object.hasOwn(candidate, key), false);
+  const imported = parsePaletteBytes(new TextEncoder().encode(JSON.stringify({
+    ...candidate, trial: observed.trial, status: 'accepted', acceptance: 'Imported claims are not evidence.',
+  })), layout);
+  for (const key of ['trial', 'status', 'acceptance']) assert.equal(Object.hasOwn(imported, key), false);
+  assert.deepEqual(imported.colors, colors);
 });
 
 test('studies survive public sharing and saved palette recovery without conferring physical acceptance', () => {

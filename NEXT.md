@@ -20,12 +20,14 @@ solely to produce a commit.
 
 ## Participant and device track
 
-- Q-09 / Q-03: [Glacier Gates](docs/FRAME-STUDIES.md) and Operator Ice from the
-  [punctuation studies](docs/PUNCTUATION-STUDIES.md) were applied for the first
-  selected physical trial. Own-slot backups and all-field exports after Hub reload
-  match; keeper references remain unchanged. Seated-distance preference and
-  readability feedback remain pending. Saved-data agreement is not acceptance or
-  second-keyboard compatibility. No unattended writes.
+- Operator Ice is liked and was chosen for the moment. The original Glacier
+  feedback requested violet Caps; the two-white-gate revision is saved and verified.
+- The all-white [Glacier Union](docs/FRAME-STUDIES.md) was trialled: white Tab
+  felt out of place in that combined context. Standalone Operator Ice was selected,
+  and the temporary slot was restored to its accepted reference. Glacier Syntax
+  is prepared online only; no further combined hardware trial is currently selected.
+- No separate all-legends readability verdict was given. Keep these context-specific
+  preferences separate from saved-data verification and from universal acceptance.
 - Q-02: a recipient's own fresh source-slot export and feedback establish actual
   second-keyboard compatibility. Keep the export private.
 - Actual Mac behavior and USB power-cycle persistence require their own devices
@@ -47,7 +49,11 @@ retaining 20. Thirty-seven app tests and eight packaging tests pass; synthetic
 conversion covers every catalog palette and study without losing protected fields.
 Actual browser checks cover exact colors, saved-file reopening from another
 reference, refresh/leave draft recovery and all five study identities. The earlier
-390px checks cover the refinement shelf; the full mobile journey remains pending. These are software results,
+390px checks cover the refinement shelf; the full mobile journey remains pending.
+The gate revision adds 2/6/6-key comparisons and preserves the original 3-key
+Glacier in Earlier versions. Forty-one app tests and eight packaging tests pass.
+Actual browser checks cover exact colors, legacy-link recognition, prior-draft
+recovery and preventing trial feedback from transferring to edited colors. These are software results,
 not physical acceptance. See the research queue. Keep Amber
 Hinge + Rose and plain Amber Hinge intact. Private exports, photos and rollback
 records remain outside public Git and releases.

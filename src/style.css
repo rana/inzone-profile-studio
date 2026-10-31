@@ -1162,6 +1162,8 @@ dialog::backdrop {
   font-weight: 600;
   margin: 0 0 9px;
 }
+.study-archive { margin-top: 12px; }
+.study-archive summary { font-size: .78rem; color: var(--muted); margin-bottom: 10px; }
 .study-choice {
   display: grid;
   grid-template-columns: 1fr auto;
