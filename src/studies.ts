@@ -4,7 +4,7 @@ import type { LayoutKey } from './types';
 export interface PaletteStudy {
   id: string;
   name: string;
-  family: 'punctuation' | 'frame';
+  family: 'punctuation' | 'frame' | 'palette';
   baseId: string;
   summary: string;
   question: string;
@@ -58,7 +58,31 @@ export const FRAME_STUDIES: readonly PaletteStudy[] = [
   },
 ];
 
-export const ALL_STUDIES: readonly PaletteStudy[] = [...PUNCTUATION_STUDIES, ...FRAME_STUDIES];
+/** One complete alternate mood, with role boundaries retained. */
+export const ALTERNATE_STUDIES: readonly PaletteStudy[] = [
+  {
+    id: 'solar-draft',
+    name: 'Solar Draft',
+    family: 'palette',
+    baseId: 'amber-hinge-rose',
+    summary: 'Amber writing, a white number rail, green Win/Fn and a violet–azure–cyan crown.',
+    question: 'Does a warm writing field offer an enjoyable alternate mood while the functional groups remain easy to recognize?',
+    changes: {
+      ...Object.fromEntries([
+        ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'SPACE', 'MINUS', 'PLUS', 'BACK_SLASH',
+        'SEMICOLON', 'QUOTE', 'COMMA', 'PERIOD', 'SLASH',
+      ].map(key => [key, '#FFB000'])),
+      ...Object.fromEntries(Array.from({ length: 10 }, (_, index) => [`NUM_${index}`, '#FFFFFF'])),
+      BRACKET_LEFT: '#FFFFFF', BRACKET_RIGHT: '#FFFFFF',
+      WIN_L: '#00FF00', FN: '#00FF00',
+      F1: '#4400FF', F2: '#4400FF', F3: '#4400FF', F4: '#4400FF',
+      F5: '#00A0FF', F6: '#00A0FF', F7: '#00A0FF', F8: '#00A0FF',
+      F9: '#00FFFF', F10: '#00FFFF', F11: '#00FFFF', F12: '#00FFFF',
+    },
+  },
+];
+
+export const ALL_STUDIES: readonly PaletteStudy[] = [...PUNCTUATION_STUDIES, ...FRAME_STUDIES, ...ALTERNATE_STUDIES];
 
 /** Start from the exact published base; never mutate it or expand a patch. */
 export function applyStudy(study: PaletteStudy, baseColors: Record<string, string>, layout: LayoutKey[]): Record<string, string> {

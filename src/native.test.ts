@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import { ALL_STUDIES, applyStudy } from './studies';
+import { makeCandidate } from './model';
 import {
   CUSTOM_SLOT, INSPECTED_VERSION, MAX_NATIVE_BYTES, MODE_NAMES, PHYSICAL_KEYS,
   parseNativeJson, parseNativeBytes, readNativeFile, prepareNative, validateNative, verifyNative,
 } from './native';
-import type { Candidate } from './types';
+import type { Candidate, LayoutKey } from './types';
 
 // Entirely synthetic schema fixture. Never a device export or an import sample.
 function fixture(model = 'INZONE KBD-H75'): Record<string, any> {
@@ -159,15 +161,24 @@ test('raw file parser rejects invalid UTF-8 rather than changing source strings'
   assert.deepEqual(await readNativeFile(file), fixture());
 });
 
-test('every published catalog palette converts against a synthetic export without losing source identity', () => {
+test('every catalog palette and untested study converts against a synthetic export without losing source identity', () => {
   const publicRoot = new URL('../public/', import.meta.url);
   const catalog = JSON.parse(readFileSync(new URL('data/catalog.json', publicRoot), 'utf8')) as { profiles: Array<{ id: string; palette: string }> };
   assert.equal(catalog.profiles.length, 9, 'the published nine-profile collection is exercised');
   assert.equal(new Set(catalog.profiles.map(p => p.id)).size, catalog.profiles.length);
-  for (const entry of catalog.profiles) {
+  const candidates = catalog.profiles.map(entry => {
     assert.ok(entry.palette.startsWith('data/palettes/') && !entry.palette.includes('..'), entry.id);
     const palette = JSON.parse(readFileSync(new URL(entry.palette, publicRoot), 'utf8')) as Candidate;
     assert.equal(palette.id, entry.id);
+    return { id: entry.id, palette };
+  });
+  const layout = (JSON.parse(readFileSync(new URL('data/layout.json', publicRoot), 'utf8')) as { keys: LayoutKey[] }).keys;
+  for (const study of ALL_STUDIES) {
+    const base = candidates.find(item => item.id === study.baseId)!.palette;
+    candidates.push({ id: study.id, palette: makeCandidate(base, applyStudy(study, base.key_colors, layout), layout) });
+  }
+  for (const entry of candidates) {
+    const palette = entry.palette;
     const source = fixture();
     const result = prepareNative(source, palette);
     const output = result.profile as ReturnType<typeof fixture>;

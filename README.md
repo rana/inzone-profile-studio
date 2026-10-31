@@ -21,7 +21,9 @@ in your browser. The public app needs no account or local installation. Share a
 palette link with someone who has the same supported keyboard; each person uses
 their own fresh Sony export when preparing an import.
 
-Open **Explore refinements** for named command-frame and punctuation studies of the keeper.
+Open **Explore studies** for alternate palettes and focused keeper refinements.
+[Solar Draft](docs/ALTERNATE-PALETTES.md) explores amber writing beneath a cool
+function-row crown; its green Win/Fn pair and white digits create a different mood.
 [Glacier Gates](docs/FRAME-STUDIES.md) tests three white command keys while the
 green writing field and established colored landmarks stay fixed. Each choice
 compares its exact changed keys against Amber Hinge + Rose. Studies

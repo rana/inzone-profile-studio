@@ -143,7 +143,7 @@ function previewStudy(study: PaletteStudy): void {
 function renderStudies(): void {
   const study = currentStudy();
   const list = byId('study-list'); list.replaceChildren();
-  for (const [family, title] of [['frame', 'Command frame'], ['punctuation', 'Punctuation landmarks']]) {
+  for (const [family, title] of [['palette', 'Alternate palettes'], ['frame', 'Command frame'], ['punctuation', 'Punctuation landmarks']]) {
     const group = el('section', 'study-family'); group.append(el('h3', '', title!));
     const choices = el('div', 'study-list'); group.append(choices); list.append(group);
     for (const item of ALL_STUDIES.filter(item => item.family === family)) {
@@ -156,7 +156,7 @@ function renderStudies(): void {
     }
   }
   byId('leave-study').hidden = !studyPreview;
-  byId('study-question').textContent = study ? study.question : 'Keep the familiar green writing field while testing one command-frame or punctuation relationship.';
+  byId('study-question').textContent = study ? study.question : 'Try a different overall mood, or refine one relationship in the keeper. Each study states the question it explores.';
   if (study || studyPreview) byId<HTMLDetailsElement>('studies').open = true;
 }
 function renderCatalog(): void {
@@ -259,7 +259,7 @@ function renderProfileContext(): void {
   byId('profile-title').textContent = study?.name || (edited ? `${meta.name} — your variation` : meta.name);
   byId('profile-summary').textContent = study?.summary || meta.summary;
   byId('profile-acceptance').textContent = study
-    ? `Untested ${study.family === 'frame' ? 'command-frame' : 'punctuation'} study of ${meta.name}. Compare at typing distance before deciding whether to keep it. Previewing does not change your keyboard.`
+    ? `Untested ${study.family === 'palette' ? 'alternate-palette' : study.family === 'frame' ? 'command-frame' : 'punctuation'} study of ${meta.name}. Compare at typing distance before deciding whether to keep it. Previewing does not change your keyboard.`
     : edited
     ? `This local variation has not been physically tested. Source palette: ${meta.name}. ${meta.acceptance || ''}`
     : meta.acceptance || statusNames[meta.status];
@@ -423,7 +423,7 @@ function createShell(): void {
       <aside class="catalog" aria-label="Profile collection"><div class="catalog-heading"><h1>Your next favorite.</h1><p>Readable light. A few useful landmarks.</p></div><button type="button" id="favorites-filter" class="filter-button" aria-pressed="false">My favorites</button><label class="mobile-profile">Choose a profile<select id="mobile-profile"></select></label><nav id="profile-list" class="profile-list" aria-label="Choose a profile"></nav><p class="catalog-note">Curated acceptance describes physical trials. Your saved favorites belong to this browser.</p></aside>
       <main id="workbench" class="workbench">
         <div class="profile-heading"><div><span class="status-tag" id="profile-status"></span><h2 id="profile-title"></h2><p id="profile-summary"></p></div><div class="profile-heading-actions"><button type="button" id="favorite" class="quiet-button" aria-pressed="false"></button><button type="button" id="use-profile" class="primary-button">Use on my keyboard</button></div></div>
-        <details id="studies" class="study-shelf"><summary>Explore refinements <span>Command frame and punctuation</span></summary><p>Compare one relationship at a time. These previews are untested on hardware and keep your saved variation intact.</p><div id="study-list" class="study-groups"></div><div class="study-followup"><p id="study-question"></p><button type="button" id="leave-study" class="quiet-button" hidden>Leave preview · return to my palette</button></div></details>
+        <details id="studies" class="study-shelf"><summary>Explore studies <span>Alternate palettes and refinements</span></summary><p>Each study explores a stated design question. These previews are untested on hardware and keep your saved variation intact.</p><div id="study-list" class="study-groups"></div><div class="study-followup"><p id="study-question"></p><button type="button" id="leave-study" class="quiet-button" hidden>Leave preview · return to my palette</button></div></details>
         <div class="workbench-toolbar"><div class="view-switch" role="group" aria-label="Preview tools"><button type="button" data-view="preview" aria-pressed="true">Preview</button><button type="button" data-view="compare" aria-pressed="false">Compare</button><button type="button" data-view="edit" aria-pressed="false">Make a variation</button></div><label class="swatch-toggle"><input type="checkbox" id="swatches" checked> Full color swatches</label></div>
         <section class="keyboard-section" aria-label="Selected palette preview"><div id="keyboard" class="keyboard-stage"></div><div class="preview-caption"><span id="draft-state"></span><span>81 keys lit · 100% brightness · preview only</span></div></section>
         <section id="compare-section" class="compare-section" hidden><div class="section-heading"><label>Compare with<select id="compare-profile"></select></label><p id="compare-result"></p></div><div id="compare-keyboard" class="keyboard-stage"></div><ul id="comparison-changes" class="comparison-changes" aria-label="Exact color differences"></ul></section>
