@@ -70,6 +70,8 @@ test('the archived three-key Glacier Gates retains its exact colors and old URL 
 
 test('editing-signal studies change exactly one actual Backspace or Delete key while preserving all other keeper colors', () => {
   const expected: Record<string, Record<string, string>> = {
+    'rose-backspace': { BACKSPACE: '#FF0080' },
+    'orange-backspace': { BACKSPACE: '#FF6A00' },
     'coral-backspace': { BACKSPACE: '#FF6060' },
     'coral-delete': { DELETE: '#FF6060' },
     'ruby-backspace': { BACKSPACE: '#FF0060' },
@@ -82,7 +84,13 @@ test('editing-signal studies change exactly one actual Backspace or Delete key w
   for (const study of EDITING_STUDIES) {
     assert.equal(study.family, 'editing');
     assert.equal(study.baseId, base.id);
-    assert.equal(study.trial, undefined);
+    if (study.id === 'coral-backspace') {
+      assert.equal(study.archived, true);
+      assert.equal(study.trial?.status, 'revision-requested');
+    } else {
+      assert.equal(study.trial, undefined);
+      assert.notEqual(study.archived, true);
+    }
     assert.deepEqual(study.changes, expected[study.id]);
     const colors = applyStudy(study, original, layout);
     assert.deepEqual(colorDifferences(original, colors), Object.keys(expected[study.id]!));
@@ -98,6 +106,12 @@ test('editing-signal studies change exactly one actual Backspace or Delete key w
     assert.equal(matchingStudy(base.id!, { ...colors, Q: '#00FF80' }, original, layout), undefined);
   }
   assert.deepEqual(base.key_colors, original);
+  const rose = applyStudy(EDITING_STUDIES.find(study => study.id === 'rose-backspace')!, original, layout);
+  const orange = applyStudy(EDITING_STUDIES.find(study => study.id === 'orange-backspace')!, original, layout);
+  assert.equal(rose.BACKSPACE, original.SHIFT_L);
+  assert.equal(rose.BACKSPACE, original.SHIFT_R);
+  assert.equal(orange.BACKSPACE, original.INSERT);
+  assert.equal(orange.INSERT, original.INSERT);
 });
 
 test('editing-signal files and documented previews recover the exact isolated study without acceptance metadata', () => {
@@ -255,6 +269,7 @@ test('physical feedback is attached only to the exact observed study and does no
     ['three-role-split', 'liked'],
     ['glacier-gates', 'revision-requested'],
     ['glacier-union', 'revision-requested'],
+    ['coral-backspace', 'revision-requested'],
   ] as const;
   for (const [id, status] of observations) {
     const study = ALL_STUDIES.find(item => item.id === id)!;
@@ -262,6 +277,7 @@ test('physical feedback is attached only to the exact observed study and does no
     const matched = matchingStudy(base.id!, colors, base.key_colors, layout);
     assert.equal(matched?.trial?.status, status);
     if (id === 'glacier-union') assert.equal(matched?.trial?.note, 'In the combined trial, white Tab felt out of place; standalone Operator Ice was chosen for the moment.');
+    else if (id === 'coral-backspace') assert.equal(matched?.trial?.note, 'In one physical trial, the Backspace color was too subtle and too pale; revision was requested.');
     else assert.ok(matched?.trial?.note.toLowerCase().includes('legend readability was not separately confirmed.'));
     if (id === 'operator-ice') assert.ok(matched?.trial?.note.includes('chosen for the moment'));
     if (id === 'three-role-split') { assert.ok(matched?.trial?.note.includes('daylight')); assert.ok(matched?.trial?.note.includes('subtle but distinguishable')); }

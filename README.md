@@ -47,9 +47,13 @@ always names the look used for saving, sharing and native preparation; viewing a
 reference does not select it. **Show reference board below** opens a second board
 when useful.
 
-**Editing signals** offers four [Backspace/Delete studies](docs/STOP-KEY-STUDIES.md):
-a coral or ruby accent on either editing key, with the other staying red. Each
-preview changes one key from the keeper and carries no physical verdict.
+**Editing signals** retains six [Backspace/Delete studies](docs/STOP-KEY-STUDIES.md).
+Rose Backspace uses the exact Shift rose; its selected trial was saved and
+export-verified, with physical feedback pending. Orange Backspace is a separate preview using the
+exact Insert orange; Insert, Delete and Esc remain unchanged. Coral Backspace is
+archived after a physical trial found it too subtle and too pale. Coral Delete
+and the two ruby studies remain untrialled. Each study preserves its original
+one-key change from the keeper; the archived comparison remains recoverable.
 
 Use **Save palette** to keep a design JSON, then **Open palette JSON** to recover
 it later. Opening validates all 81 illuminated keys and matched modifier pairs.

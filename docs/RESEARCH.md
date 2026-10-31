@@ -51,7 +51,7 @@ clipboard interaction was deliberately not repeated in this run. The full mobile
 journey remains Q-08. All 41 app tests, eight packaging tests, the public-data
 check and production build pass. These are software results, not physical trials.
 
-## Editing signals · previews prepared
+## Editing signals · preview and trial evidence
 
 The owner requested a visible distinction between red Backspace and Delete.
 [Four one-key studies](STOP-KEY-STUDIES.md) compare coral or ruby placed on
@@ -74,6 +74,17 @@ subtle but distinguishable, at an appropriate emphasis. No separate all-legends
 readability or ranking over Operator Ice was supplied. Operator Ice remains unchanged in
 slot 4, and the historical keeper remains unchanged in slot 1. No red-key study
 was applied during that punctuation comparison.
+
+The later Coral Backspace trial was too subtle and too pale on the physical
+keyboard. Its exact proposal remains in Earlier versions with revision-requested
+feedback; the result does not transfer to Coral Delete. The owner proposed the
+familiar Shift rose or Insert orange. A Claude follow-up supported testing one
+saturated Backspace color at a time, leaving Insert unchanged until an actual
+loss of emphasis or unwanted grouping is observed. Rose Backspace was saved
+and strictly read back as a separate selected trial; its physical verdict is
+pending. Orange Backspace is prepared online only. Both change exactly one
+keeper key and preserve every other color. Matching a larger key's hue can alter
+visual grouping, but it does not by itself establish that Insert needs a change.
 
 ## Participant and device investigations
 

@@ -116,15 +116,35 @@ export const ALTERNATE_STUDIES: readonly PaletteStudy[] = [
   },
 ];
 
-/** Preview-only red-family comparisons; do not combine them with other studies. */
+/** Editing-key comparisons; trial observations apply only to their exact maps. */
 export const EDITING_STUDIES: readonly PaletteStudy[] = [
+  {
+    id: 'rose-backspace',
+    name: 'Rose Backspace',
+    family: 'editing',
+    baseId: 'amber-hinge-rose',
+    summary: 'Backspace uses the exact rose Shift color; Delete, Esc and Insert stay unchanged.',
+    question: 'Does the familiar Shift rose make Backspace clearly distinct from red Delete without confusing the modifier relationship?',
+    changes: { BACKSPACE: '#FF0080' },
+  },
+  {
+    id: 'orange-backspace',
+    name: 'Orange Backspace',
+    family: 'editing',
+    baseId: 'amber-hinge-rose',
+    summary: 'Backspace uses the exact Insert orange; Insert, Delete and Esc stay unchanged.',
+    question: 'Does sharing Insert orange distinguish Backspace usefully while keeping Insert recognizable?',
+    changes: { BACKSPACE: '#FF6A00' },
+  },
   {
     id: 'coral-backspace',
     name: 'Coral Backspace',
     family: 'editing',
+    archived: true,
     baseId: 'amber-hinge-rose',
     summary: 'A coral Backspace beside signal-red Delete; Esc stays red.',
     question: 'Does the wider coral tint distinguish Backspace while both editing keys still feel related?',
+    trial: { status: 'revision-requested', note: 'In one physical trial, the Backspace color was too subtle and too pale; revision was requested.' },
     changes: { BACKSPACE: '#FF6060' },
   },
   {

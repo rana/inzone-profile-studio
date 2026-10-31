@@ -24,9 +24,12 @@ solely to produce a commit.
   were physically liked; the subtle separators felt appropriately emphasized.
   Slots 1, 2 and 4 remain byte-identical to their fresh backups; Operator Ice
   remains available in slot 4. Recorded slot observations are not live state.
-- Four [editing-signal previews](docs/STOP-KEY-STUDIES.md) compare coral/ruby
-  accents on Backspace or Delete. Each changes one keeper key; none is installed.
-  Evaluate the punctuation trial first, then choose any later red-key trial.
+- [Editing signals](docs/STOP-KEY-STUDIES.md): Coral Backspace was too subtle
+  and too pale physically, so its exact map is retained in Earlier versions.
+  A selected Rose Backspace trial was saved in slot 2 and strictly read back;
+  physical feedback is pending. It changes only Backspace from the keeper to
+  the exact Shift rose. Orange Backspace is a separate preview with Insert's
+  orange; Insert itself stays unchanged until a physical issue warrants a change.
 - Operator Ice is liked and was chosen for the moment. The original Glacier
   feedback requested violet Caps; the two-white-gate revision is saved and verified.
 - The all-white [Glacier Union](docs/FRAME-STUDIES.md) was trialled: white Tab
