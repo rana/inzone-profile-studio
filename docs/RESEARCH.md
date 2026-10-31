@@ -69,7 +69,9 @@ native preservation. Actual browser previews show each intended pair, 81 keys,
 one difference and no physical verdict. Current checks pass 43 app tests, eight
 packaging tests, public-data validation and build. The separate selected
 Three-Role Split trial was saved in slot 3 and strictly export-verified after
-Hub reload; physical feedback is pending. Operator Ice remains unchanged in
+Hub reload. Daylight feedback found the distinctions useful and the separators
+subtle but distinguishable, at an appropriate emphasis. No separate all-legends
+readability or ranking over Operator Ice was supplied. Operator Ice remains unchanged in
 slot 4, and the historical keeper remains unchanged in slot 1. No red-key study
 was applied during that punctuation comparison.
 

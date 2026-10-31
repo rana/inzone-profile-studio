@@ -252,6 +252,7 @@ test('study identity requires the correct reference and every exact color, not a
 test('physical feedback is attached only to the exact observed study and does not transfer to revisions', () => {
   const observations = [
     ['operator-ice', 'liked'],
+    ['three-role-split', 'liked'],
     ['glacier-gates', 'revision-requested'],
     ['glacier-union', 'revision-requested'],
   ] as const;
@@ -263,6 +264,7 @@ test('physical feedback is attached only to the exact observed study and does no
     if (id === 'glacier-union') assert.equal(matched?.trial?.note, 'In the combined trial, white Tab felt out of place; standalone Operator Ice was chosen for the moment.');
     else assert.ok(matched?.trial?.note.toLowerCase().includes('legend readability was not separately confirmed.'));
     if (id === 'operator-ice') assert.ok(matched?.trial?.note.includes('chosen for the moment'));
+    if (id === 'three-role-split') { assert.ok(matched?.trial?.note.includes('daylight')); assert.ok(matched?.trial?.note.includes('subtle but distinguishable')); }
     assert.equal(matchingStudy(base.id!, { ...colors, Q: '#00FF80' }, base.key_colors, layout), undefined);
     assert.equal(matchingStudy('another-reference', colors, base.key_colors, layout), undefined);
   }

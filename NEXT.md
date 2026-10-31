@@ -20,7 +20,8 @@ solely to produce a commit.
 ## Participant and device track
 
 - Three-Role Split is installed as a selected trial in slot 3; fresh readback
-  after Hub reload matches the intended profile. Its physical verdict is pending.
+  after Hub reload matches the intended profile. In daylight, its distinctions
+  were physically liked; the subtle separators felt appropriately emphasized.
   Slots 1, 2 and 4 remain byte-identical to their fresh backups; Operator Ice
   remains available in slot 4. Recorded slot observations are not live state.
 - Four [editing-signal previews](docs/STOP-KEY-STUDIES.md) compare coral/ruby

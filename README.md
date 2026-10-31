@@ -30,7 +30,8 @@ operator keys; Glacier Syntax keeps the gates white and makes those operators
 blue. Earlier versions remain under **Earlier versions**. Each choice compares
 its exact colors with Amber Hinge + Rose. Physical feedback is noted for exact
 studies where available. After the Glacier Union trial, standalone Operator Ice
-was chosen for the moment; Glacier Syntax remains untested. Browsing, editing
+was chosen for the moment; Three-Role Split was later liked in a daylight trial
+for its subtle but distinguishable separators. Glacier Syntax remains untested. Browsing, editing
 and refreshing a trial preserve
 your saved variation; **Leave preview** returns to it. Save or share a trial to
 keep it independently. Study names are recognized only while every color matches

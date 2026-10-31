@@ -41,6 +41,7 @@ export const PUNCTUATION_STUDIES: readonly PaletteStudy[] = [
     baseId: 'amber-hinge-rose',
     summary: 'White operator/path keys, a cyan quote and chartreuse separators.',
     question: 'Do three punctuation roles add useful distinctions, or make the writing field too busy?',
+    trial: { status: 'liked', note: 'Liked in one daylight physical trial; separators were subtle but distinguishable and appropriately emphasized. Legend readability was not separately confirmed.' },
     changes: {
       MINUS: '#FFFFFF', PLUS: '#FFFFFF', SLASH: '#FFFFFF', BACK_SLASH: '#FFFFFF',
       QUOTE: '#00FFFF', SEMICOLON: '#A0FF00', COMMA: '#A0FF00', PERIOD: '#A0FF00',
