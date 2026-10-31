@@ -22,7 +22,7 @@ MINUS is the -/_ key, PLUS is the =/+ key, BACK_SLASH is the backslash/pipe key.
 
 ## Compare safely
 
-In the studio, open **Explore punctuation refinements** and choose a named study; it opens **Compare** automatically. Alternatively, open a preview link, then choose **Compare**. An opened variation link defaults to its accepted **Amber Hinge + Rose (original)** reference. The app labels these as local variations, never as newly accepted palettes. Reloading or sharing the URL reconstructs the exact RGB assignments and recognizes the exact study name. Temporary previews preserve existing saved variations; **Leave preview** returns to the previous palette. Opening a preview does not change a connected keyboard.
+In the studio, open **Explore refinements** and choose a named study; it opens **Compare** automatically. Alternatively, open a preview link, then choose **Compare**. An opened variation link defaults to its accepted **Amber Hinge + Rose (original)** reference. The app labels these as local variations, never as newly accepted palettes. Reloading or sharing the URL reconstructs the exact RGB assignments and recognizes the exact study name. Temporary previews preserve existing saved variations; **Leave preview** returns to the previous palette. Opening a preview does not change a connected keyboard.
 
 Screen RGB is not calibrated LED output. Pale aqua may look white; chartreuse may blend toward green or the warm function row. A real trial needs a chosen slot, its fresh source export, backup, official Sony import/Save, fresh export verification and the user's seated-distance feedback. Keep the accepted slot available for comparison.
 

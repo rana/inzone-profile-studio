@@ -1156,6 +1156,12 @@ dialog::backdrop {
   grid-template-columns: repeat(3,minmax(0,1fr));
   gap: 10px;
 }
+.study-groups { display: grid; gap: 17px; }
+.study-family h3 {
+  font-size: .82rem;
+  font-weight: 600;
+  margin: 0 0 9px;
+}
 .study-choice {
   display: grid;
   grid-template-columns: 1fr auto;

@@ -21,8 +21,10 @@ in your browser. The public app needs no account or local installation. Share a
 palette link with someone who has the same supported keyboard; each person uses
 their own fresh Sony export when preparing an import.
 
-Open **Explore punctuation refinements** for three named studies of the keeper.
-Each choice compares its exact changed keys against Amber Hinge + Rose. Studies
+Open **Explore refinements** for named command-frame and punctuation studies of the keeper.
+[Glacier Gates](docs/FRAME-STUDIES.md) tests three white command keys while the
+green writing field and established colored landmarks stay fixed. Each choice
+compares its exact changed keys against Amber Hinge + Rose. Studies
 remain untested on hardware. Browsing, editing and refreshing a trial preserve
 your saved variation; **Leave preview** returns to it. Save or share a trial to
 keep it independently. Study names are recognized only while every color matches

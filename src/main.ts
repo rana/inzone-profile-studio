@@ -3,7 +3,7 @@ import { LatestTask } from './async-task';
 import { readPaletteFile } from './palette-file';
 import { readNativeFile, prepareNative, verifyNative } from './native';
 import { colorDifferences, colorsFromUrl, makeCandidate, publicShareUrl, recolor, shareUrl, validateColors } from './model';
-import { PUNCTUATION_STUDIES, applyStudy, matchingStudy } from './studies';
+import { ALL_STUDIES, applyStudy, matchingStudy } from './studies';
 import type { PaletteStudy } from './studies';
 import type { Candidate, Catalog, CatalogProfile, LayoutKey } from './types';
 
@@ -143,16 +143,20 @@ function previewStudy(study: PaletteStudy): void {
 function renderStudies(): void {
   const study = currentStudy();
   const list = byId('study-list'); list.replaceChildren();
-  for (const item of PUNCTUATION_STUDIES) {
-    const button = el('button', 'study-choice'); button.type = 'button';
-    button.dataset.study = item.id; button.setAttribute('aria-pressed', String(study?.id === item.id));
-    const samples = el('span', 'study-samples'); samples.setAttribute('aria-hidden', 'true');
-    [...new Set(Object.values(item.changes))].forEach(color => { const sample = el('i'); sample.style.backgroundColor = color; samples.append(sample); });
-    button.append(samples, el('strong', '', item.name), el('span', 'study-count', `${Object.keys(item.changes).length} ${Object.keys(item.changes).length === 1 ? 'key' : 'keys'}`), el('span', 'study-summary', item.summary));
-    button.addEventListener('click', () => previewStudy(item)); list.append(button);
+  for (const [family, title] of [['frame', 'Command frame'], ['punctuation', 'Punctuation landmarks']]) {
+    const group = el('section', 'study-family'); group.append(el('h3', '', title!));
+    const choices = el('div', 'study-list'); group.append(choices); list.append(group);
+    for (const item of ALL_STUDIES.filter(item => item.family === family)) {
+      const button = el('button', 'study-choice'); button.type = 'button';
+      button.dataset.study = item.id; button.setAttribute('aria-pressed', String(study?.id === item.id));
+      const samples = el('span', 'study-samples'); samples.setAttribute('aria-hidden', 'true');
+      [...new Set(Object.values(item.changes))].forEach(color => { const sample = el('i'); sample.style.backgroundColor = color; samples.append(sample); });
+      button.append(samples, el('strong', '', item.name), el('span', 'study-count', `${Object.keys(item.changes).length} ${Object.keys(item.changes).length === 1 ? 'key' : 'keys'}`), el('span', 'study-summary', item.summary));
+      button.addEventListener('click', () => previewStudy(item)); choices.append(button);
+    }
   }
   byId('leave-study').hidden = !studyPreview;
-  byId('study-question').textContent = study ? study.question : 'Start with Operator Ice: one punctuation group, with the green writing field kept intact.';
+  byId('study-question').textContent = study ? study.question : 'Keep the familiar green writing field while testing one command-frame or punctuation relationship.';
   if (study || studyPreview) byId<HTMLDetailsElement>('studies').open = true;
 }
 function renderCatalog(): void {
@@ -255,7 +259,7 @@ function renderProfileContext(): void {
   byId('profile-title').textContent = study?.name || (edited ? `${meta.name} — your variation` : meta.name);
   byId('profile-summary').textContent = study?.summary || meta.summary;
   byId('profile-acceptance').textContent = study
-    ? `Untested punctuation study of ${meta.name}. Compare at typing distance before deciding whether to keep it. Previewing does not change your keyboard.`
+    ? `Untested ${study.family === 'frame' ? 'command-frame' : 'punctuation'} study of ${meta.name}. Compare at typing distance before deciding whether to keep it. Previewing does not change your keyboard.`
     : edited
     ? `This local variation has not been physically tested. Source palette: ${meta.name}. ${meta.acceptance || ''}`
     : meta.acceptance || statusNames[meta.status];
@@ -419,7 +423,7 @@ function createShell(): void {
       <aside class="catalog" aria-label="Profile collection"><div class="catalog-heading"><h1>Your next favorite.</h1><p>Readable light. A few useful landmarks.</p></div><button type="button" id="favorites-filter" class="filter-button" aria-pressed="false">My favorites</button><label class="mobile-profile">Choose a profile<select id="mobile-profile"></select></label><nav id="profile-list" class="profile-list" aria-label="Choose a profile"></nav><p class="catalog-note">Curated acceptance describes physical trials. Your saved favorites belong to this browser.</p></aside>
       <main id="workbench" class="workbench">
         <div class="profile-heading"><div><span class="status-tag" id="profile-status"></span><h2 id="profile-title"></h2><p id="profile-summary"></p></div><div class="profile-heading-actions"><button type="button" id="favorite" class="quiet-button" aria-pressed="false"></button><button type="button" id="use-profile" class="primary-button">Use on my keyboard</button></div></div>
-        <details id="studies" class="study-shelf"><summary>Explore punctuation refinements <span>Three studies of the keeper</span></summary><p>Compare one relationship at a time. These previews are untested on hardware and keep your saved variation intact.</p><div id="study-list" class="study-list"></div><div class="study-followup"><p id="study-question"></p><button type="button" id="leave-study" class="quiet-button" hidden>Leave preview · return to my palette</button></div></details>
+        <details id="studies" class="study-shelf"><summary>Explore refinements <span>Command frame and punctuation</span></summary><p>Compare one relationship at a time. These previews are untested on hardware and keep your saved variation intact.</p><div id="study-list" class="study-groups"></div><div class="study-followup"><p id="study-question"></p><button type="button" id="leave-study" class="quiet-button" hidden>Leave preview · return to my palette</button></div></details>
         <div class="workbench-toolbar"><div class="view-switch" role="group" aria-label="Preview tools"><button type="button" data-view="preview" aria-pressed="true">Preview</button><button type="button" data-view="compare" aria-pressed="false">Compare</button><button type="button" data-view="edit" aria-pressed="false">Make a variation</button></div><label class="swatch-toggle"><input type="checkbox" id="swatches" checked> Full color swatches</label></div>
         <section class="keyboard-section" aria-label="Selected palette preview"><div id="keyboard" class="keyboard-stage"></div><div class="preview-caption"><span id="draft-state"></span><span>81 keys lit · 100% brightness · preview only</span></div></section>
         <section id="compare-section" class="compare-section" hidden><div class="section-heading"><label>Compare with<select id="compare-profile"></select></label><p id="compare-result"></p></div><div id="compare-keyboard" class="keyboard-stage"></div><ul id="comparison-changes" class="comparison-changes" aria-label="Exact color differences"></ul></section>

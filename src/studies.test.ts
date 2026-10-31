@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { colorDifferences, colorsFromUrl, makeCandidate, publicShareUrl, validateColors } from './model';
 import { parsePaletteBytes } from './palette-file';
-import { applyStudy, matchingStudy, PUNCTUATION_STUDIES } from './studies';
+import { ALL_STUDIES, applyStudy, FRAME_STUDIES, matchingStudy, PUNCTUATION_STUDIES } from './studies';
 import type { PaletteStudy } from './studies';
 import type { Candidate, LayoutKey } from './types';
 
@@ -23,6 +23,7 @@ test('documented punctuation studies change exactly 1, 4 and 8 keys without alte
   const untouched = structuredClone(base.key_colors);
   assert.deepEqual(PUNCTUATION_STUDIES.map(study => study.id), Object.keys(expectedChanges));
   for (const study of PUNCTUATION_STUDIES) {
+    assert.equal(study.family, 'punctuation');
     assert.equal(study.baseId, base.id);
     assert.deepEqual(study.changes, expectedChanges[study.id]);
     const colors = applyStudy(study, base.key_colors, layout);
@@ -37,6 +38,25 @@ test('documented punctuation studies change exactly 1, 4 and 8 keys without alte
     assert.equal(colors.SHIFT_L, colors.SHIFT_R);
   }
   assert.deepEqual(base.key_colors, untouched);
+});
+
+test('Glacier Gates changes only the three command keys and preserves every learned landmark', () => {
+  assert.equal(FRAME_STUDIES.length, 1);
+  const study = FRAME_STUDIES[0]!;
+  assert.equal(study.id, 'glacier-gates');
+  assert.equal(study.family, 'frame');
+  assert.equal(study.baseId, base.id);
+  assert.deepEqual(study.changes, { TAB: '#FFFFFF', CAP: '#FFFFFF', ENTER: '#FFFFFF' });
+  const original = structuredClone(base.key_colors);
+  const colors = applyStudy(study, base.key_colors, layout);
+  assert.deepEqual(colorDifferences(original, colors).sort(), ['CAP', 'ENTER', 'TAB']);
+  for (const key of Object.keys(original)) assert.equal(colors[key], ['CAP', 'ENTER', 'TAB'].includes(key) ? '#FFFFFF' : original[key]);
+  assert.deepEqual(base.key_colors, original);
+  validateColors(colors, layout);
+  assert.equal(Object.keys(colors).length, 81);
+  assert.equal(Object.values(colors).every(color => color !== '#000000'), true);
+  assert.equal(new Set(ALL_STUDIES.map(item => item.id)).size, 4);
+  assert.deepEqual(ALL_STUDIES, [...PUNCTUATION_STUDIES, ...FRAME_STUDIES]);
 });
 
 test('study patches refuse unknown, black, malformed or asymmetric changes instead of silently expanding them', () => {
@@ -54,7 +74,7 @@ test('study patches refuse unknown, black, malformed or asymmetric changes inste
 
 test('study identity requires the correct reference and every exact color, not a partial patch match', () => {
   assert.equal(matchingStudy(base.id!, base.key_colors, base.key_colors, layout), undefined);
-  for (const study of PUNCTUATION_STUDIES) {
+  for (const study of ALL_STUDIES) {
     const colors = applyStudy(study, base.key_colors, layout);
     assert.equal(matchingStudy(base.id!, colors, base.key_colors, layout)?.id, study.id);
     assert.equal(matchingStudy('another-reference', colors, base.key_colors, layout), undefined);
@@ -63,7 +83,7 @@ test('study identity requires the correct reference and every exact color, not a
 });
 
 test('studies survive public sharing and saved palette recovery without conferring physical acceptance', () => {
-  for (const study of PUNCTUATION_STUDIES) {
+  for (const study of ALL_STUDIES) {
     const colors = applyStudy(study, base.key_colors, layout);
     const link = publicShareUrl(base.id!, colors, base.key_colors, layout);
     const fromUrl = colorsFromUrl(link, base.key_colors, layout);
