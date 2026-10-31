@@ -20,12 +20,12 @@ solely to produce a commit.
 
 ## Participant and device track
 
-- Q-09 first frame study: [Glacier Gates](docs/FRAME-STUDIES.md) is prepared and
-  selected for a physical trial. Only Tab, Caps Lock and Enter change to white.
-- Q-03: Operator Ice from the [punctuation studies](docs/PUNCTUATION-STUDIES.md)
-  is also selected for a separate trial. Preserve the keeper references; use fresh
-  same-slot backups and readback verification before seated-distance feedback.
-  Neither selection is an installation or acceptance result. No unattended writes.
+- Q-09 / Q-03: [Glacier Gates](docs/FRAME-STUDIES.md) and Operator Ice from the
+  [punctuation studies](docs/PUNCTUATION-STUDIES.md) were applied for the first
+  selected physical trial. Own-slot backups and all-field exports after Hub reload
+  match; keeper references remain unchanged. Seated-distance preference and
+  readability feedback remain pending. Saved-data agreement is not acceptance or
+  second-keyboard compatibility. No unattended writes.
 - Q-02: a recipient's own fresh source-slot export and feedback establish actual
   second-keyboard compatibility. Keep the export private.
 - Actual Mac behavior and USB power-cycle persistence require their own devices
