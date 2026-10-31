@@ -19,6 +19,13 @@ solely to produce a commit.
 
 ## Participant and device track
 
+- Three-Role Split is installed as a selected trial in slot 3; fresh readback
+  after Hub reload matches the intended profile. Its physical verdict is pending.
+  Slots 1, 2 and 4 remain byte-identical to their fresh backups; Operator Ice
+  remains available in slot 4. Recorded slot observations are not live state.
+- Four [editing-signal previews](docs/STOP-KEY-STUDIES.md) compare coral/ruby
+  accents on Backspace or Delete. Each changes one keeper key; none is installed.
+  Evaluate the punctuation trial first, then choose any later red-key trial.
 - Operator Ice is liked and was chosen for the moment. The original Glacier
   feedback requested violet Caps; the two-white-gate revision is saved and verified.
 - The all-white [Glacier Union](docs/FRAME-STUDIES.md) was trialled: white Tab
@@ -49,7 +56,9 @@ board; a caption names the output target and the optional second board stays
 folded initially. Browser checks at 1280×720 confirm keyboard focus, read-only
 reference viewing, exact saved-file recovery and context resets. Palette downloads
 and synthetic native preparation are byte-identical from either viewing side.
-All 41 app tests, eight packaging tests, the public-data check and build pass.
+Q-07 passed 41 app tests and eight packaging tests at delivery; the current
+editing-signal additions pass 43 app tests, eight packaging tests, public-data
+validation and build.
 The share handlers still use selected colors; clipboard interaction was not
 retested in this run. Q-08 remains the full narrow-screen journey.
 

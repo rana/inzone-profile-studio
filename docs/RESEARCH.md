@@ -51,6 +51,28 @@ clipboard interaction was deliberately not repeated in this run. The full mobile
 journey remains Q-08. All 41 app tests, eight packaging tests, the public-data
 check and production build pass. These are software results, not physical trials.
 
+## Editing signals · previews prepared
+
+The owner requested a visible distinction between red Backspace and Delete.
+[Four one-key studies](STOP-KEY-STUDIES.md) compare coral or ruby placed on
+one key at a time; the other and Esc stay pure red. Claude suggested hue and
+purity splits. We chose a wider coral tint than its initial suggestion because
+previous close amber differences were physically indistinguishable. Reversing
+placement tests which editing role benefits without assuming Delete is more
+severe. Ruby deliberately tests a cooler branch, with a known risk of blending
+with rose Shift. These are local design hypotheses, not calibrated LED results
+or claims about universal psychology or editing performance.
+
+The four complete palette files preserve all other 80 colors. Tests cover exact
+patches, immutable roots, saved-file identity, documented links and synthetic
+native preservation. Actual browser previews show each intended pair, 81 keys,
+one difference and no physical verdict. Current checks pass 43 app tests, eight
+packaging tests, public-data validation and build. The separate selected
+Three-Role Split trial was saved in slot 3 and strictly export-verified after
+Hub reload; physical feedback is pending. Operator Ice remains unchanged in
+slot 4, and the historical keeper remains unchanged in slot 1. No red-key study
+was applied during that punctuation comparison.
+
 ## Participant and device investigations
 
 | ID / state | Question | Next action | Completion evidence |

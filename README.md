@@ -46,6 +46,10 @@ always names the look used for saving, sharing and native preparation; viewing a
 reference does not select it. **Show reference board below** opens a second board
 when useful.
 
+**Editing signals** offers four [Backspace/Delete studies](docs/STOP-KEY-STUDIES.md):
+a coral or ruby accent on either editing key, with the other staying red. Each
+preview changes one key from the keeper and carries no physical verdict.
+
 Use **Save palette** to keep a design JSON, then **Open palette JSON** to recover
 it later. Opening validates all 81 illuminated keys and matched modifier pairs.
 Changed colors become a local variation with a comparison to the published

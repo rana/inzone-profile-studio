@@ -154,7 +154,7 @@ function renderStudies(): void {
     button.append(samples, el('strong', '', item.name), el('span', 'study-count', `${count} ${count === 1 ? 'key' : 'keys'}`), el('span', 'study-summary', item.summary));
     button.addEventListener('click', () => previewStudy(item)); return button;
   };
-  for (const [family, title] of [['palette', 'Alternate palettes'], ['frame', 'Command frame'], ['punctuation', 'Punctuation landmarks']]) {
+  for (const [family, title] of [['palette', 'Alternate palettes'], ['frame', 'Command frame'], ['punctuation', 'Punctuation landmarks'], ['editing', 'Editing signals']]) {
     const group = el('section', 'study-family'); group.append(el('h3', '', title!));
     const choices = el('div', 'study-list'); group.append(choices); list.append(group);
     for (const item of ALL_STUDIES.filter(item => item.family === family && !item.archived)) choices.append(studyButton(item));
@@ -283,7 +283,7 @@ function renderProfileContext(): void {
   byId('profile-acceptance').textContent = study
     ? study.trial
       ? `${study.trial.note} Source palette: ${meta.name}. Feedback applies to this exact study; previewing does not change your keyboard.`
-      : `Proposed ${study.family === 'palette' ? 'alternate-palette' : study.family === 'frame' ? 'command-frame' : 'punctuation'} study of ${meta.name}. No physical verdict is recorded for this exact look. Previewing does not change your keyboard.`
+      : `Proposed ${study.family === 'palette' ? 'alternate-palette' : study.family === 'frame' ? 'command-frame' : study.family === 'editing' ? 'editing-signal' : 'punctuation'} study of ${meta.name}. No physical verdict is recorded for this exact look. Previewing does not change your keyboard.`
     : edited
     ? `This local variation has not been physically tested. Source palette: ${meta.name}. ${meta.acceptance || ''}`
     : meta.acceptance || statusNames[meta.status];

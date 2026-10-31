@@ -4,7 +4,7 @@ import type { LayoutKey } from './types';
 export interface PaletteStudy {
   id: string;
   name: string;
-  family: 'punctuation' | 'frame' | 'palette';
+  family: 'punctuation' | 'frame' | 'palette' | 'editing';
   archived?: boolean;
   trial?: { status: 'liked' | 'revision-requested'; note: string };
   baseId: string;
@@ -115,7 +115,47 @@ export const ALTERNATE_STUDIES: readonly PaletteStudy[] = [
   },
 ];
 
-export const ALL_STUDIES: readonly PaletteStudy[] = [...PUNCTUATION_STUDIES, ...FRAME_STUDIES, ...ALTERNATE_STUDIES];
+/** Preview-only red-family comparisons; do not combine them with other studies. */
+export const EDITING_STUDIES: readonly PaletteStudy[] = [
+  {
+    id: 'coral-backspace',
+    name: 'Coral Backspace',
+    family: 'editing',
+    baseId: 'amber-hinge-rose',
+    summary: 'A coral Backspace beside signal-red Delete; Esc stays red.',
+    question: 'Does the wider coral tint distinguish Backspace while both editing keys still feel related?',
+    changes: { BACKSPACE: '#FF6060' },
+  },
+  {
+    id: 'coral-delete',
+    name: 'Coral Delete',
+    family: 'editing',
+    baseId: 'amber-hinge-rose',
+    summary: 'A coral Delete beside signal-red Backspace; Esc stays red.',
+    question: 'Does placing the coral tint on Delete work better than placing it on Backspace?',
+    changes: { DELETE: '#FF6060' },
+  },
+  {
+    id: 'ruby-backspace',
+    name: 'Ruby Backspace',
+    family: 'editing',
+    baseId: 'amber-hinge-rose',
+    summary: 'A ruby-red Backspace beside signal-red Delete; Esc stays red.',
+    question: 'Does ruby separate Backspace usefully, or blend with the nearby rose modifier family?',
+    changes: { BACKSPACE: '#FF0060' },
+  },
+  {
+    id: 'ruby-delete',
+    name: 'Ruby Delete',
+    family: 'editing',
+    baseId: 'amber-hinge-rose',
+    summary: 'A ruby-red Delete beside signal-red Backspace; Esc stays red.',
+    question: 'Does ruby distinguish Delete while retaining its editing role, or feel too close to rose Shift?',
+    changes: { DELETE: '#FF0060' },
+  },
+];
+
+export const ALL_STUDIES: readonly PaletteStudy[] = [...PUNCTUATION_STUDIES, ...FRAME_STUDIES, ...ALTERNATE_STUDIES, ...EDITING_STUDIES];
 
 /** Start from the exact published base; never mutate it or expand a patch. */
 export function applyStudy(study: PaletteStudy, baseColors: Record<string, string>, layout: LayoutKey[]): Record<string, string> {

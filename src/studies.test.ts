@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { colorDifferences, colorsFromUrl, makeCandidate, publicShareUrl, validateColors } from './model';
 import { parsePaletteBytes } from './palette-file';
-import { ALL_STUDIES, ALTERNATE_STUDIES, applyStudy, FRAME_STUDIES, matchingStudy, PUNCTUATION_STUDIES } from './studies';
+import { ALL_STUDIES, ALTERNATE_STUDIES, applyStudy, EDITING_STUDIES, FRAME_STUDIES, matchingStudy, PUNCTUATION_STUDIES } from './studies';
 import type { PaletteStudy } from './studies';
 import type { Candidate, LayoutKey } from './types';
 
@@ -65,7 +65,60 @@ test('the archived three-key Glacier Gates retains its exact colors and old URL 
   assert.deepEqual(oldColors, colors);
   assert.equal(matchingStudy(base.id!, oldColors, base.key_colors, layout)?.id, study.id);
   assert.equal(new Set(ALL_STUDIES.map(item => item.id)).size, ALL_STUDIES.length);
-  assert.deepEqual(ALL_STUDIES, [...PUNCTUATION_STUDIES, ...FRAME_STUDIES, ...ALTERNATE_STUDIES]);
+  assert.deepEqual(ALL_STUDIES, [...PUNCTUATION_STUDIES, ...FRAME_STUDIES, ...ALTERNATE_STUDIES, ...EDITING_STUDIES]);
+});
+
+test('editing-signal studies change exactly one actual Backspace or Delete key while preserving all other keeper colors', () => {
+  const expected: Record<string, Record<string, string>> = {
+    'coral-backspace': { BACKSPACE: '#FF6060' },
+    'coral-delete': { DELETE: '#FF6060' },
+    'ruby-backspace': { BACKSPACE: '#FF0060' },
+    'ruby-delete': { DELETE: '#FF0060' },
+  };
+  assert.deepEqual(EDITING_STUDIES.map(study => study.id), Object.keys(expected));
+  assert.equal(layout.find(key => key.id === 'BACKSPACE')?.label, 'Backspace');
+  assert.equal(layout.find(key => key.id === 'DELETE')?.label, 'Del');
+  const original = structuredClone(base.key_colors);
+  for (const study of EDITING_STUDIES) {
+    assert.equal(study.family, 'editing');
+    assert.equal(study.baseId, base.id);
+    assert.equal(study.trial, undefined);
+    assert.deepEqual(study.changes, expected[study.id]);
+    const colors = applyStudy(study, original, layout);
+    assert.deepEqual(colorDifferences(original, colors), Object.keys(expected[study.id]!));
+    assert.equal(colors.ESC, '#FF0000');
+    for (const key of Object.keys(original)) assert.equal(colors[key], expected[study.id]![key] || original[key]);
+    validateColors(colors, layout);
+    assert.equal(Object.keys(colors).length, 81);
+    assert.equal(Object.values(colors).every(color => color !== '#000000'), true);
+    assert.equal(colors.CTRL_L, colors.CTRL_R);
+    assert.equal(colors.ALT_L, colors.ALT_R);
+    assert.equal(colors.SHIFT_L, colors.SHIFT_R);
+    assert.equal(matchingStudy(base.id!, colors, original, layout)?.id, study.id);
+    assert.equal(matchingStudy(base.id!, { ...colors, Q: '#00FF80' }, original, layout), undefined);
+  }
+  assert.deepEqual(base.key_colors, original);
+});
+
+test('editing-signal files and documented previews recover the exact isolated study without acceptance metadata', () => {
+  const document = readFileSync(new URL('../docs/STOP-KEY-STUDIES.md', import.meta.url), 'utf8');
+  for (const study of EDITING_STUDIES) {
+    const candidate = JSON.parse(readFileSync(new URL(`../public/data/studies/${study.id}.json`, import.meta.url), 'utf8')) as Candidate;
+    const colors = applyStudy(study, base.key_colors, layout);
+    assert.equal(candidate.id, 'amber-hinge-rose-draft');
+    assert.equal(candidate.name, study.name);
+    assert.equal(candidate.brightness_percent, 100);
+    assert.equal(candidate.brightness_level, 10);
+    assert.deepEqual(candidate.key_colors, colors);
+    for (const key of ['trial', 'status', 'acceptance']) assert.equal(Object.hasOwn(candidate, key), false);
+    const reopened = parsePaletteBytes(new TextEncoder().encode(JSON.stringify(candidate)), layout);
+    assert.equal(reopened.id, 'amber-hinge-rose-draft');
+    assert.deepEqual(reopened.colors, colors);
+    assert.equal(matchingStudy(base.id!, reopened.colors, base.key_colors, layout)?.id, study.id);
+    const preview = document.match(new RegExp(`\\[Preview ${study.name}\\]\\(([^)]+)\\)`))?.[1];
+    assert.ok(preview, `${study.name} has a documented preview.`);
+    assert.deepEqual(colorsFromUrl(preview, base.key_colors, layout), colors);
+  }
 });
 
 test('current Glacier refinements change exactly 2, 6 and 6 keys while Caps and all other keys retain the keeper colors', () => {
