@@ -1129,3 +1129,103 @@ dialog::backdrop {
     font-size: .73rem;
   }
 }
+
+.study-shelf {
+  margin: 0 0 22px;
+  border-block: 1px solid var(--line);
+  padding: 13px 0;
+}
+.study-shelf summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: .9rem;
+}
+.study-shelf summary span {
+  color: var(--muted);
+  font-size: .77rem;
+  margin-left: 10px;
+}
+.study-shelf > p, .study-followup p {
+  color: var(--muted);
+  font-size: .81rem;
+  max-width: 76ch;
+  margin: 12px 0;
+}
+.study-list {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 10px;
+}
+.study-choice {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 7px 10px;
+  padding: 14px;
+  text-align: left;
+  align-content: start;
+}
+.study-choice[aria-pressed=true] {
+  border: 2px solid var(--accent);
+  padding: 13px;
+  background: var(--wash);
+}
+.study-samples {
+  display: flex;
+  gap: 3px;
+  grid-column: 1 / -1;
+}
+.study-samples i, .change-color i {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 1px solid #8995a1;
+  border-radius: 3px;
+  flex: none;
+}
+.study-choice strong {
+  font-size: .87rem;
+  font-weight: 600;
+}
+.study-count {
+  font-size: .75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.study-summary {
+  font-size: .78rem;
+  grid-column: 1 / -1;
+  line-height: 1.5;
+}
+.study-followup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.study-followup p { flex: 1 1 300px; }
+.study-followup button { font-size: .79rem; }
+.comparison-changes {
+  padding: 0;
+  margin: 14px 0 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(230px,1fr));
+  gap: 8px 20px;
+  max-height: 250px;
+  overflow: auto;
+}
+.comparison-changes li {
+  border-bottom: 1px solid var(--line);
+  padding: 8px 0;
+  font-size: .77rem;
+}
+.comparison-changes strong { display: block; margin-bottom: 5px; }
+.change-color { display: flex; align-items: center; gap: 7px; }
+@media(max-width:800px) {
+  .study-shelf summary span { display: block; margin: 4px 0 0 17px; }
+}
+@media(max-width:600px) {
+  .study-list { grid-template-columns: 1fr; }
+  .study-choice { padding: 12px; }
+  .study-choice[aria-pressed=true] { padding: 11px; }
+}

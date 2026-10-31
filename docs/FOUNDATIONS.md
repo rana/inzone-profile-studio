@@ -53,6 +53,21 @@ needed. Favor a recoverable artifact and a clear next action over clever control
 Ask Claude to challenge a consequential design choice with relevant evidence;
 agreement between models is not physical validation.
 
-Stop when the question is answered. Keep an existing design when a variation is
-indistinguishable or adds no benefit. An hourly timer is permission to make useful
-progress, not an obligation to manufacture palettes or notifications.
+Close an experiment when its question is answered. Keep an existing design when
+a physical comparison finds a variation indistinguishable or without benefit.
+This closes that experiment; it does not close the project's other questions.
+
+## Autonomous exploration
+
+The hourly continuation advances website usability, recoverability, research and
+motivated theme studies. Physical testing is a parallel track. Waiting for an
+owner, another keyboard or a Mac does not prevent an independent software or
+design investigation. A clean repository is a starting point for that work,
+not evidence that no useful work remains.
+
+Choose a bounded question and define what would answer it. Improve an observed
+friction point, investigate a relevant approach, or prepare a contrasting theme
+with a stated purpose. Preserve accepted designs while exploring. A checked
+negative result can be useful; it does not have to become a feature. Keep a small
+ready queue so the next continuation has a concrete direction without repeating
+the same checks or manufacturing palettes and notifications.

@@ -21,6 +21,13 @@ in your browser. The public app needs no account or local installation. Share a
 palette link with someone who has the same supported keyboard; each person uses
 their own fresh Sony export when preparing an import.
 
+Open **Explore punctuation refinements** for three named studies of the keeper.
+Each choice compares its exact changed keys against Amber Hinge + Rose. Studies
+remain untested on hardware. Browsing, editing and refreshing a trial preserve
+your saved variation; **Leave preview** returns to it. Save or share a trial to
+keep it independently. Study names are recognized only while every color matches
+the proposal, and downloads use distinct study filenames.
+
 Choose a palette to relight the on-screen board. Inspect a key, share the selected
 look, or open the secondary comparison and draft tools. Previewing never writes
 the keyboard. A downloaded palette is a design file, not a Sony native import.

@@ -1,17 +1,42 @@
 # Research and development queue
 
-Read [foundations](FOUNDATIONS.md), [current delivery](../NEXT.md) and Git status
-before choosing work. These IDs stay stable as questions are resolved. Pick the
-first actionable item, record its evidence and update NEXT.md; do not work around
-missing physical participation or duplicate another agent's work.
+Read [foundations](FOUNDATIONS.md), [current priorities](../NEXT.md) and Git
+status before choosing work. These IDs remain stable as questions are resolved.
+Each continuation advances one bounded software, research or design question.
+Missing participant evidence blocks its own trial, not the ready track.
 
-| ID / state | Observed question | Next bounded action | Completion evidence |
+## Ready software and design investigations
+
+| ID / state | Question | Next bounded action | Completion evidence |
 | --- | --- | --- | --- |
-| Q-01 · completed 2026-10-30 | Can a look survive a save/open/share round trip? | Save palette and Open palette JSON now complete this path. Opening validates all 81 illuminated keys and mirrored pairs; imported metadata cannot confer acceptance. | The actual browser-saved file reopened at a fresh local origin with all 81 colors equal. After its local draft was removed, a URL-only tab reconstructed the same colors. Missing/duplicate keys and native-shaped files failed visibly without changing the preview; 26 tests and the build passed. |
-| Q-03 · prepared; needs physical trial | Can punctuation landmarks help without fragmenting the green writing field? | Three [preview studies](PUNCTUATION-STUDIES.md) are prepared. The owner can choose one to trial; keep controls and F banks fixed. | Owner identifies a useful distinction from typing distance, or retain the keeper and close the study. A preview alone cannot resolve physical usefulness. |
-| Q-02 · needs recipient | Can another owner use a look while preserving their own setup? | Walk through one recipient's fresh same-slot export privately. Check supported format before preparing; record only a generic compatibility result. | Fresh readback preserves unrelated fields; recipient confirms legibility and behavior. Until then, do not claim second-keyboard or Mac acceptance. |
-| Q-04 · completed 2026-10-30 | What remains usable if the workstation or network disappears? | Versioned public ZIP, checksums and [recovery guide](RECOVERY.md); Node 22.12+ on the 22 line, no npm or project dependencies for the extracted app. | Clean-directory Node server delivered all 15 assets with exact hashes in a loopback-only namespace with no routes. A fresh-port browser recovered all 81 colors from a public-site saved palette. Eight packaging tests cover integrity, boundaries and recovery failures; 26 app tests remain green. The browser itself was not network-disabled. |
-| Q-05 · completed 2026-10-30 | Can sharing from a local copy open the public studio for a recipient? | Sharing and assistant requests use a canonical public URL with all 81 colors; a visible selectable link and preview action support inspection. Local address-bar state keeps its origin. | A five-key local variation generated an 81-color public snapshot; the live public decoder reconstructed all 81 colors exactly. Assistant sharing showed the same URL. Profile/edit/import/restore/native-workflow actions clear outdated links; source metadata was excluded. Thirty app tests and eight packaging tests pass. |
+| Q-06 · completed 2026-10-31 | Can prepared refinements be discovered and compared without searching project documents? | Delivered a named study shelf, keeper comparison, exact before/after key list and safe return to the prior draft. | Actual browser checks: exact 1/4/8 changes, focus retained, edits invalidate the named identity, reload/leave recovers the saved draft, named save/open and full81 sharing match, native preparation still needs an own source. A 390px viewport had no horizontal overflow. All 34 app tests and eight packaging tests passed. |
+| Q-07 · ready | Can subtle differences be understood without scanning two entire boards? | Investigate in-place A/B comparison; Q-06 already delivered the readable changed-key list with before/after swatches. Keep the actual selected design distinct from the temporarily viewed reference. | Pointer and keyboard journeys identify the changes; preview toggling cannot silently change sharing, saving or native preparation. |
+| Q-08 · ready | Can a family member use the essential journey on a smaller screen? | Test actual narrow viewports through choose → compare → save/open → share. Repair observed friction, including lost context or inaccessible controls. | Record actual viewport dimensions, essential actions, overflow and focus results. A requested viewport override alone is insufficient evidence. |
+| Q-09 · ready | What contrasting mood works while preserving the learned role map? | Develop one motivated color family against the keeper, with a stated intent, role relationships and visual comparison. Consult Claude for the consequential palette choice, not a routine endorsement. | Validated 81-key assignments, matched modifiers, preserved reference, explicit hypothesis and untested label. Publish a useful comparison; await physical acceptance separately. |
+| Q-10 · ready | Can private trial feedback survive the loss of a chat or browser? | Design a small portable observation record: design identity, room context, distinction/readability result and preference. Use synthetic data to test recovery. | Save/open preserves context and design association. Private records are opt-in and remain outside public assets; a record cannot automatically promote a palette to accepted. |
+
+An investigation may end with a useful negative result or a narrower question.
+Prefer observed friction and unfinished work, but do not require a new issue or
+physical test before investigating independent opportunities. When the ready
+queue is exhausted, inspect the user journey and relevant primary references to
+propose the next small questions. Avoid random palette generation, feature
+accumulation and repeated checks of unchanged software.
+
+## Participant and device investigations
+
+| ID / state | Question | Next action | Completion evidence |
+| --- | --- | --- | --- |
+| Q-03 · prepared; needs physical trial | Can punctuation landmarks help without fragmenting the green writing field? | Choose one of the three [punctuation studies](PUNCTUATION-STUDIES.md). Use a fresh same-slot export and preserve the accepted reference. | The owner identifies a useful distinction from typing distance, or prefers the keeper and closes that study. Preview alone cannot establish usefulness. |
+| Q-02 · needs recipient | Can another owner use a look while preserving their own setup? | Walk through one recipient's fresh same-slot export privately; check supported format before preparing. | Fresh readback preserves unrelated fields; recipient confirms legibility and behavior. Record only generic compatibility findings publicly. |
+| Device tests · needs actual hardware | Do behavior and settings persist across reconnects and work correctly on macOS? | Run USB power-cycle and actual Mac acceptance when those devices are available. | Direct physical and OS observations; file equality and Linux results do not substitute for these tests. |
+
+## Completed software questions
+
+| ID / completed | Question and result | Checked evidence and limits |
+| --- | --- | --- |
+| Q-01 · 2026-10-30 | Can a look survive save/open/share? Save palette and Open palette JSON complete the recovery path. | An actual browser-saved file reopened at a fresh local origin with all 81 colors equal; URL-only recovery also matched. Missing/duplicate keys and native-shaped files failed without changing the preview. Imported metadata cannot confer acceptance. |
+| Q-04 · 2026-10-30 | What remains usable if the workstation or network disappears? A versioned public ZIP includes a verifier and [recovery guide](RECOVERY.md). | Clean extraction served all 15 app assets with exact hashes inside a loopback-only namespace without routes. A fresh-port browser recovered all 81 saved colors; that browser itself was not network-disabled. Eight packaging tests covered integrity, boundaries and recovery failures. Node 22.12+ on the Node 22 line is required. |
+| Q-05 · 2026-10-30 | Can sharing from a local copy reach a public recipient? Explicit sharing uses a canonical public URL and all 81 colors. | A local five-key variation reconstructed exactly in the live public decoder; assistant sharing used the same URL. Context changes clear stale links. Thirty app tests and eight packaging tests passed at delivery. Full colors resist reference-color drift, but the published comparison ID must still exist. |
 
 ## Patterns worth borrowing
 
@@ -29,11 +54,11 @@ protocol implementations or dependencies.
   the separation of geometry, palette intent, supported adapter and actual device
   evidence. A VIA definition cannot make this Sony keyboard VIA-compatible.
 
-## Stop and report
+## Completion and handoff
 
-Each continuation should leave one reviewable improvement or a precise evidence
-gap. Stop widening scope once its completion evidence passes. Wait for genuine
-recipient input when required; improve an independent ready item meanwhile.
-Keep resolved results compact and link the relevant commit or check. Do not keep
-retesting unchanged software, invoke Claude on a schedule alone, or generate
-variations merely to fill the queue.
+Define the question, a bounded action and completion evidence before expanding
+scope. Review the actual diff, run relevant checks and commit useful completed
+work. Update NEXT.md with the next ready action, decisions and remaining limits.
+Keep research conclusions distinct from checked software behavior and physical
+acceptance. Notify for a useful result, material finding or required
+participation; unchanged healthy checks do not need repeated announcements.

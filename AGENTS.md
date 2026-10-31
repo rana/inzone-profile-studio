@@ -28,8 +28,14 @@ source-slot exports, private feedback and rollback history.
   the daily keyboard or mouse. Physical color acceptance is a separate observation.
 - Coordinate concurrent work. Review the actual diff, run meaningful validation,
   and commit completed improvements. Respect the repository's recorded audience.
-- Maintain NEXT.md with one next useful task and clear evidence limits. Do not
-  generate palette variations or call Claude merely to satisfy a schedule.
+- Maintain NEXT.md with a prioritized ready software/design task and a separate
+  participant/device track. Missing physical feedback blocks only the relevant
+  trial, not independent website improvements, research or theme exploration.
+- Hourly continuation actively advances one bounded question from the ready
+  research queue. A quiet repository or empty issue list is not a reason to stop.
+  Replenish useful questions from the actual user journey and design goals when
+  needed. Record checked outcomes, including useful negative results; do not add
+  features, random palettes, repetitive tests or Claude calls to fill an hour.
 - Build offline releases from clean reviewed commits with `npm run bundle:offline`.
   Preserve published tags and assets; bump the version before another release.
   The public recovery payload never includes private backups or browser state.
