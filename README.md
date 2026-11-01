@@ -12,7 +12,7 @@ an experiment or a retained reference.
 [Foundations and principles](docs/FOUNDATIONS.md) explain what we protect.
 [The research and open questions queue](docs/RESEARCH.md) gives the hourly
 continuation bounded goals. [Punctuation studies](docs/PUNCTUATION-STUDIES.md)
-offer three proposed variations to compare with the keeper.
+offer four focused variations to compare with the keeper.
 
 ## Use it
 
@@ -31,7 +31,10 @@ blue. Earlier versions remain under **Earlier versions**. Each choice compares
 its exact colors with Amber Hinge + Rose. Physical feedback is noted for exact
 studies where available. After the Glacier Union trial, standalone Operator Ice
 was chosen for the moment; Three-Role Split was later liked in a daylight trial
-for its subtle but distinguishable separators. Glacier Syntax remains untested. Browsing, editing
+for its subtle but distinguishable separators. [Chartreuse Punctuation](docs/PUNCTUATION-STUDIES.md)
+now applies that chartreuse hue to eight specified punctuation keys, retaining
+all other 73 keeper colors. It is retained after a neutral physical response;
+legend readability was not separately confirmed. Glacier Syntax remains untested. Browsing, editing
 and refreshing a trial preserve
 your saved variation; **Leave preview** returns to it. Save or share a trial to
 keep it independently. Study names are recognized only while every color matches

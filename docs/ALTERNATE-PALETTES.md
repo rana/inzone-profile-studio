@@ -2,8 +2,9 @@
 
 These studies explore a different overall mood while preserving recognizable
 functional groups. The accepted Amber Hinge + Rose keeper remains unchanged.
-None of these designs is physically accepted; this is an offline design study,
-with no hardware writes.
+Solar Draft was subsequently saved as a selected physical trial using its own
+source-slot export and strictly verified after Sony Hub reload. Its physical
+verdict remains pending; saved-data verification is not physical acceptance.
 
 ## Solar Draft
 

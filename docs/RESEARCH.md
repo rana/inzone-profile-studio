@@ -86,6 +86,46 @@ pending. Orange Backspace is prepared online only. Both change exactly one
 keeper key and preserve every other color. Matching a larger key's hue can alter
 visual grouping, but it does not by itself establish that Insert needs a change.
 
+## Owner-directed Chartreuse Punctuation trial
+
+The owner selected the keeper as the base and requested the exact comma color
+from Three-Role Split on eight punctuation keys. Fresh actual exports confirmed
+that source hue as `#A0FF00` and that the source keeper still matches its published
+palette. The study changes MINUS, PLUS, BACK_SLASH, SEMICOLON, QUOTE, COMMA,
+PERIOD and SLASH; the other 73 colors stay exact. It compares one consistent
+punctuation group with the earlier three-role treatment without revising either
+accepted design. There was no additional speculative palette decision.
+
+The selected slot-4 trial was prepared from its own fresh export, preserving
+protected settings, and applied through Sony controls. Fresh exports after Hub
+reload match every intended field; slots 1–3 remain byte-identical to their own
+fresh backups. Operator Ice is retained in the private rollback library. The physical
+response was neutral and the owner requested that it remain installed. The
+current inclination is toward the keeper and Rose Backspace, with no single
+winner; neutral retention is neither acceptance nor rejection. Public artifacts
+contain only the palette and generic
+software evidence; native backups and private slot provenance remain local.
+All 44 app tests pass, including exact eight-key and 73-retained-color checks,
+file/link identity and synthetic native preservation. RGB and readback equality
+do not establish physical legibility, preference or USB power-cycle persistence.
+
+## Solar Draft · selected physical trial
+
+After the neutral chartreuse comparison, the owner requested substantially
+different experiments, including prepared looks not yet seen on the keyboard.
+Solar Draft was selected for a separate slot-3 trial. The existing amber writing,
+white numbers, green Win/Fn and cool crown composition remains unchanged. A
+focused Claude review used its exact palette and design notes at a fixed public
+commit, then highlighted edge-key distinction and white-number balance as the
+two physical questions. Its recommendation is design reasoning, not validation.
+
+Three-Role Split was backed up before the same-slot conversion. All 61 intended
+key changes and 131 RGB-field differences were checked, with an explicit profile
+name change separate from lighting. Fresh exports after Sony Hub reload match
+all intended fields; slots 1, 2 and 4 stay byte-identical. Solar's physical verdict
+is pending. The 20 retained colors and existing functional grouping are design
+facts; actual legibility, balance and enjoyment require the owner's observation.
+
 ## Participant and device investigations
 
 | ID / state | Question | Next action | Completion evidence |

@@ -288,7 +288,7 @@ function renderProfileContext(): void {
     ? `This local variation has not been physically tested. Source palette: ${meta.name}. ${meta.acceptance || ''}`
     : meta.acceptance || statusNames[meta.status];
   byId('profile-status').textContent = study
-    ? study.trial?.status === 'liked' ? 'Study · liked in one physical trial' : study.trial?.status === 'revision-requested' ? 'Study · revision requested' : 'Study · no physical verdict'
+    ? study.trial?.status === 'liked' ? 'Study · liked in one physical trial' : study.trial?.status === 'neutral' ? 'Study · neutral physical response' : study.trial?.status === 'revision-requested' ? 'Study · revision requested' : 'Study · no physical verdict'
     : edited ? 'Local variation' : statusNames[meta.status];
 }
 function render(): void {

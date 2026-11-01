@@ -6,7 +6,7 @@ export interface PaletteStudy {
   name: string;
   family: 'punctuation' | 'frame' | 'palette' | 'editing';
   archived?: boolean;
-  trial?: { status: 'liked' | 'revision-requested'; note: string };
+  trial?: { status: 'liked' | 'revision-requested' | 'neutral'; note: string };
   baseId: string;
   summary: string;
   question: string;
@@ -45,6 +45,19 @@ export const PUNCTUATION_STUDIES: readonly PaletteStudy[] = [
     changes: {
       MINUS: '#FFFFFF', PLUS: '#FFFFFF', SLASH: '#FFFFFF', BACK_SLASH: '#FFFFFF',
       QUOTE: '#00FFFF', SEMICOLON: '#A0FF00', COMMA: '#A0FF00', PERIOD: '#A0FF00',
+    },
+  },
+  {
+    id: 'chartreuse-punctuation',
+    name: 'Chartreuse Punctuation',
+    family: 'punctuation',
+    baseId: 'amber-hinge-rose',
+    summary: 'Eight chartreuse punctuation keys; the keeper writing field, tilde and brackets stay unchanged.',
+    question: 'Does one consistent chartreuse punctuation group provide the distinction you wanted within the green writing field?',
+    trial: { status: 'neutral', note: 'Neutral in one physical response and retained for comparison; legend readability was not separately confirmed.' },
+    changes: {
+      MINUS: '#A0FF00', PLUS: '#A0FF00', BACK_SLASH: '#A0FF00', SEMICOLON: '#A0FF00',
+      QUOTE: '#A0FF00', COMMA: '#A0FF00', PERIOD: '#A0FF00', SLASH: '#A0FF00',
     },
   },
 ];

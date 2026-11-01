@@ -18,9 +18,13 @@ const expectedChanges: Record<string, Record<string, string>> = {
     MINUS: '#FFFFFF', PLUS: '#FFFFFF', SLASH: '#FFFFFF', BACK_SLASH: '#FFFFFF',
     QUOTE: '#00FFFF', SEMICOLON: '#A0FF00', COMMA: '#A0FF00', PERIOD: '#A0FF00',
   },
+  'chartreuse-punctuation': {
+    MINUS: '#A0FF00', PLUS: '#A0FF00', BACK_SLASH: '#A0FF00', SEMICOLON: '#A0FF00',
+    QUOTE: '#A0FF00', COMMA: '#A0FF00', PERIOD: '#A0FF00', SLASH: '#A0FF00',
+  },
 };
 
-test('documented punctuation studies change exactly 1, 4 and 8 keys without altering the base', () => {
+test('documented punctuation studies change exactly 1, 4, 8 and 8 keys without altering the base', () => {
   const untouched = structuredClone(base.key_colors);
   assert.deepEqual(PUNCTUATION_STUDIES.map(study => study.id), Object.keys(expectedChanges));
   for (const study of PUNCTUATION_STUDIES) {
@@ -39,6 +43,35 @@ test('documented punctuation studies change exactly 1, 4 and 8 keys without alte
     assert.equal(colors.SHIFT_L, colors.SHIFT_R);
   }
   assert.deepEqual(base.key_colors, untouched);
+});
+
+test('Chartreuse Punctuation candidate and preview retain exactly the requested eight-key change and known reference', () => {
+  const study = PUNCTUATION_STUDIES.find(item => item.id === 'chartreuse-punctuation')!;
+  const original = structuredClone(base.key_colors);
+  const colors = applyStudy(study, original, layout);
+  assert.equal(study.trial?.status, 'neutral');
+  assert.equal(Object.keys(study.changes).length, 8);
+  assert.equal(Object.keys(original).filter(key => !Object.hasOwn(study.changes, key)).length, 73);
+  assert.equal(colors.BACKSPACE, original.BACKSPACE);
+  assert.equal(colors.TILDE, original.TILDE);
+  assert.equal(colors.BRACKET_LEFT, original.BRACKET_LEFT);
+  assert.equal(colors.BRACKET_RIGHT, original.BRACKET_RIGHT);
+  const candidate = JSON.parse(readFileSync(new URL('../public/data/studies/chartreuse-punctuation.json', import.meta.url), 'utf8')) as Candidate;
+  assert.deepEqual(candidate.key_colors, colors);
+  assert.equal(candidate.id, 'amber-hinge-rose-draft');
+  assert.equal(candidate.name, 'Chartreuse Punctuation');
+  assert.equal(candidate.brightness_percent, 100);
+  assert.equal(candidate.brightness_level, 10);
+  for (const key of ['trial', 'status', 'acceptance']) assert.equal(Object.hasOwn(candidate, key), false);
+  const reopened = parsePaletteBytes(new TextEncoder().encode(JSON.stringify(candidate)), layout);
+  assert.equal(reopened.id, 'amber-hinge-rose-draft');
+  assert.deepEqual(reopened.colors, colors);
+  assert.equal(matchingStudy(base.id!, reopened.colors, original, layout)?.id, study.id);
+  const document = readFileSync(new URL('../docs/PUNCTUATION-STUDIES.md', import.meta.url), 'utf8');
+  const preview = document.match(/\[Preview Chartreuse Punctuation\]\(([^)]+)\)/)?.[1];
+  assert.ok(preview, 'The exact chartreuse preview is documented.');
+  assert.deepEqual(colorsFromUrl(preview, original, layout), colors);
+  assert.deepEqual(base.key_colors, original);
 });
 
 test('the archived three-key Glacier Gates retains its exact colors and old URL identity', () => {
@@ -267,6 +300,7 @@ test('physical feedback is attached only to the exact observed study and does no
   const observations = [
     ['operator-ice', 'liked'],
     ['three-role-split', 'liked'],
+    ['chartreuse-punctuation', 'neutral'],
     ['glacier-gates', 'revision-requested'],
     ['glacier-union', 'revision-requested'],
     ['coral-backspace', 'revision-requested'],
@@ -281,6 +315,7 @@ test('physical feedback is attached only to the exact observed study and does no
     else assert.ok(matched?.trial?.note.toLowerCase().includes('legend readability was not separately confirmed.'));
     if (id === 'operator-ice') assert.ok(matched?.trial?.note.includes('chosen for the moment'));
     if (id === 'three-role-split') { assert.ok(matched?.trial?.note.includes('daylight')); assert.ok(matched?.trial?.note.includes('subtle but distinguishable')); }
+    if (id === 'chartreuse-punctuation') assert.equal(matched?.trial?.note, 'Neutral in one physical response and retained for comparison; legend readability was not separately confirmed.');
     assert.equal(matchingStudy(base.id!, { ...colors, Q: '#00FF80' }, base.key_colors, layout), undefined);
     assert.equal(matchingStudy('another-reference', colors, base.key_colors, layout), undefined);
   }
