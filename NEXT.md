@@ -23,10 +23,12 @@ solely to produce a commit.
   Its exact eight-key change and Operator Ice rollback are retained.
 - The owner currently leans toward slots 1 and 2, with no single winner. This
   does not establish a full readability or contrast verdict for Rose Backspace.
-- Solar Draft is a selected trial in slot 3, saved and strictly read back after
-  Hub reload; physical feedback is pending. Three-Role Split is backed up and
-  remains a physically liked design. Slots 1, 2 and 4 stayed byte-identical.
-  These are dated saved observations, not live state.
+- Solar Azure Rail remains in slot 3 after one physical comparison found that
+  the amber letters led and blue digits were readable. It changes only ten
+  digits from Solar Draft; the original is retained with its positive overall
+  response and request to reduce white-digit emphasis. Three-Role Split remains
+  backed up and physically liked. Slots 1, 2 and 4 stayed byte-identical.
+  These are dated saved observations, not live state or an overall ranking.
 - [Editing signals](docs/STOP-KEY-STUDIES.md): Coral Backspace was too subtle
   and too pale physically, so its exact map is retained in Earlier versions.
   A selected Rose Backspace trial was saved in slot 2 and strictly read back;
@@ -64,7 +66,7 @@ folded initially. Browser checks at 1280×720 confirm keyboard focus, read-only
 reference viewing, exact saved-file recovery and context resets. Palette downloads
 and synthetic native preparation are byte-identical from either viewing side.
 Q-07 passed 41 app tests and eight packaging tests at delivery; the current
-study additions pass 44 app tests, eight packaging tests, public-data
+study additions pass 46 app tests, eight packaging tests, public-data
 validation and build.
 The share handlers still use selected colors; clipboard interaction was not
 retested in this run. Q-08 remains the full narrow-screen journey.

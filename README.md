@@ -23,7 +23,12 @@ their own fresh Sony export when preparing an import.
 
 Open **Explore studies** for alternate palettes and focused keeper refinements.
 [Solar Draft](docs/ALTERNATE-PALETTES.md) explores amber writing beneath a cool
-function-row crown; its green Win/Fn pair and white digits create a different mood.
+function-row crown. Physical feedback found it enjoyable and balanced overall,
+but the white digits were too prominent. **Solar Azure Rail** changes only those
+ten digits to azure; all other 71 Solar colors, including white brackets, stay
+unchanged. In one physical trial, the amber letters led and the blue digits were
+readable, meeting that comparison's emphasis goal. The Solar Draft original
+remains available.
 [Glacier Gates](docs/FRAME-STUDIES.md) now keeps only Tab and Enter white, with
 Caps restored to violet. Glacier Union combines those gates with four white
 operator keys; Glacier Syntax keeps the gates white and makes those operators

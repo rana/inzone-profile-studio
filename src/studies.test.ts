@@ -221,7 +221,7 @@ test('all three current Glacier candidate files and documented previews match th
 });
 
 test('Solar Draft defines a complete alternate mood with exactly 61 changed and 20 preserved keys', () => {
-  assert.equal(ALTERNATE_STUDIES.length, 1);
+  assert.deepEqual(ALTERNATE_STUDIES.map(study => study.id), ['solar-draft', 'solar-azure-rail']);
   const study = ALTERNATE_STUDIES[0]!;
   assert.equal(study.id, 'solar-draft');
   assert.equal(study.family, 'palette');
@@ -253,7 +253,9 @@ test('Solar Draft defines a complete alternate mood with exactly 61 changed and 
 });
 
 test('the downloadable Solar Draft candidate exactly matches the study and restores its reference identity', () => {
-  const candidate = JSON.parse(readFileSync(new URL('../public/data/studies/solar-draft.json', import.meta.url), 'utf8')) as Candidate;
+  const bytes = readFileSync(new URL('../public/data/studies/solar-draft.json', import.meta.url));
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), 'f97a29780b84edfe2379089cc26fa67356929084d2640364bf21471b1124924d');
+  const candidate = JSON.parse(bytes.toString('utf8')) as Candidate;
   const study = ALTERNATE_STUDIES[0]!;
   const colors = applyStudy(study, base.key_colors, layout);
   assert.deepEqual(candidate.key_colors, colors);
@@ -270,6 +272,54 @@ test('the downloadable Solar Draft candidate exactly matches the study and resto
   const document = readFileSync(new URL('../docs/ALTERNATE-PALETTES.md', import.meta.url), 'utf8');
   const preview = document.match(/\[Preview Solar Draft\]\(([^)]+)\)/)?.[1];
   assert.ok(preview, 'The documented preview link exists.');
+  assert.deepEqual(colorsFromUrl(preview, base.key_colors, layout), colors);
+});
+
+test('Solar Azure Rail changes only ten digits from Solar Draft and leaves its other 71 colors intact', () => {
+  const solar = ALTERNATE_STUDIES.find(study => study.id === 'solar-draft')!;
+  const rail = ALTERNATE_STUDIES.find(study => study.id === 'solar-azure-rail')!;
+  const original = structuredClone(base.key_colors);
+  const solarColors = applyStudy(solar, original, layout);
+  const solarUntouched = structuredClone(solarColors);
+  const railColors = applyStudy(rail, original, layout);
+  const digits = ['NUM_0', 'NUM_1', 'NUM_2', 'NUM_3', 'NUM_4', 'NUM_5', 'NUM_6', 'NUM_7', 'NUM_8', 'NUM_9'];
+  assert.equal(rail.trial?.status, 'liked');
+  assert.equal(rail.baseId, base.id);
+  assert.equal(rail.family, 'palette');
+  assert.deepEqual(colorDifferences(solarColors, railColors).sort(), digits);
+  for (const key of Object.keys(solarColors)) assert.equal(railColors[key], digits.includes(key) ? '#00A0FF' : solarColors[key]);
+  assert.equal(Object.keys(solarColors).filter(key => !digits.includes(key)).length, 71);
+  assert.equal(railColors.BRACKET_LEFT, '#FFFFFF');
+  assert.equal(railColors.BRACKET_RIGHT, '#FFFFFF');
+  assert.equal(Object.keys(rail.changes).length, 61);
+  assert.equal(colorDifferences(original, railColors).length, 61);
+  const unchangedKeeperKeys = Object.keys(original).filter(key => !Object.hasOwn(rail.changes, key));
+  assert.equal(unchangedKeeperKeys.length, 20);
+  for (const key of unchangedKeeperKeys) assert.equal(railColors[key], original[key]);
+  validateColors(railColors, layout);
+  assert.equal(Object.keys(railColors).length, 81);
+  assert.equal(Object.values(railColors).every(color => color !== '#000000'), true);
+  assert.deepEqual(solarColors, solarUntouched);
+  assert.deepEqual(base.key_colors, original);
+});
+
+test('Solar Azure Rail candidate, documented preview and saved identity match its exact colors', () => {
+  const study = ALTERNATE_STUDIES.find(item => item.id === 'solar-azure-rail')!;
+  const colors = applyStudy(study, base.key_colors, layout);
+  const candidate = JSON.parse(readFileSync(new URL('../public/data/studies/solar-azure-rail.json', import.meta.url), 'utf8')) as Candidate;
+  assert.deepEqual(candidate.key_colors, colors);
+  assert.equal(candidate.id, 'amber-hinge-rose-draft');
+  assert.equal(candidate.name, 'Solar Azure Rail');
+  assert.equal(candidate.brightness_percent, 100);
+  assert.equal(candidate.brightness_level, 10);
+  for (const key of ['trial', 'status', 'acceptance']) assert.equal(Object.hasOwn(candidate, key), false);
+  const reopened = parsePaletteBytes(new TextEncoder().encode(JSON.stringify(candidate)), layout);
+  assert.equal(reopened.id, 'amber-hinge-rose-draft');
+  assert.deepEqual(reopened.colors, colors);
+  assert.equal(matchingStudy(base.id!, reopened.colors, base.key_colors, layout)?.id, study.id);
+  const document = readFileSync(new URL('../docs/ALTERNATE-PALETTES.md', import.meta.url), 'utf8');
+  const preview = document.match(/\[Preview Solar Azure Rail\]\(([^)]+)\)/)?.[1];
+  assert.ok(preview, 'The exact azure-rail preview is documented.');
   assert.deepEqual(colorsFromUrl(preview, base.key_colors, layout), colors);
 });
 
@@ -304,6 +354,8 @@ test('physical feedback is attached only to the exact observed study and does no
     ['glacier-gates', 'revision-requested'],
     ['glacier-union', 'revision-requested'],
     ['coral-backspace', 'revision-requested'],
+    ['solar-draft', 'revision-requested'],
+    ['solar-azure-rail', 'liked'],
   ] as const;
   for (const [id, status] of observations) {
     const study = ALL_STUDIES.find(item => item.id === id)!;
@@ -316,11 +368,12 @@ test('physical feedback is attached only to the exact observed study and does no
     if (id === 'operator-ice') assert.ok(matched?.trial?.note.includes('chosen for the moment'));
     if (id === 'three-role-split') { assert.ok(matched?.trial?.note.includes('daylight')); assert.ok(matched?.trial?.note.includes('subtle but distinguishable')); }
     if (id === 'chartreuse-punctuation') assert.equal(matched?.trial?.note, 'Neutral in one physical response and retained for comparison; legend readability was not separately confirmed.');
+    if (id === 'solar-draft') { assert.ok(matched?.trial?.note.includes('Enjoyable and balanced overall')); assert.ok(matched?.trial?.note.includes('white digits were too prominent')); }
+    if (id === 'solar-azure-rail') assert.equal(matched?.trial?.note, 'In one physical trial, the amber letters led and the blue digits were readable. Whole-keyboard legend readability was not separately confirmed.');
     assert.equal(matchingStudy(base.id!, { ...colors, Q: '#00FF80' }, base.key_colors, layout), undefined);
     assert.equal(matchingStudy('another-reference', colors, base.key_colors, layout), undefined);
   }
   for (const id of ['glacier-gates-v2', 'glacier-syntax']) assert.equal(FRAME_STUDIES.find(study => study.id === id)!.trial, undefined);
-  assert.equal(ALTERNATE_STUDIES[0]!.trial, undefined);
 });
 
 test('exported and opened palette data cannot inherit or confer trial status or acceptance', () => {

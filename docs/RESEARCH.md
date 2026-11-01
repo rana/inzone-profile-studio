@@ -122,16 +122,33 @@ two physical questions. Its recommendation is design reasoning, not validation.
 Three-Role Split was backed up before the same-slot conversion. All 61 intended
 key changes and 131 RGB-field differences were checked, with an explicit profile
 name change separate from lighting. Fresh exports after Sony Hub reload match
-all intended fields; slots 1, 2 and 4 stay byte-identical. Solar's physical verdict
-is pending. The 20 retained colors and existing functional grouping are design
-facts; actual legibility, balance and enjoyment require the owner's observation.
+all intended fields; slots 1, 2 and 4 stay byte-identical. The owner found Solar
+enjoyable and balanced overall, but the white digits
+came forward more strongly than the more-used amber letters. A refinement was
+requested; this is a specific salience observation rather than rejection of the
+whole palette or a measurement of luminance.
+
+A second Claude discussion supported an isolated ten-digit revision using the
+existing azure hue. Solar Azure Rail changes only digits 0–9 from white to
+`#00A0FF`; the other 71 Solar colors, including white brackets, remain exact.
+The new same-slot conversion changed only 20 RGB fields and an explicitly
+prepared profile name. Fresh exports after Hub reload match every intended
+field; slots 1, 2 and 4 stay byte-identical to their fresh backups. The original
+Solar export and its earlier Three-Role Split rollback remain retained.
+
+The owner confirmed in one physical comparison that letters led and digits were
+readable, meeting that bounded hierarchy goal. This does not establish an overall
+ranking, whole-keyboard readability or measured brightness. Potential blending
+with the middle F-bank or isolated white brackets has not been separately judged.
+Original Solar and the revised rail keep distinct identities and feedback; saved
+palette data cannot confer either verdict on edited colors.
 
 ## Participant and device investigations
 
 | ID / state | Question | Next action | Completion evidence |
 | --- | --- | --- | --- |
 | Q-09 · requested revision saved | Which white command keys belong in the green field? | White Tab/Enter were liked in the original context; Caps was requested back in violet. The two-key revision was saved through Sony controls and exactly export-verified. | Keep the component preference and requested revision distinct from a separate full-palette verdict. Earlier three-key colors and identity remain preserved. |
-| Q-03 · liked; current choice for the moment | Can punctuation landmarks coexist with the green field? | Operator Ice was liked and selected as the current standalone look. Retain it without automatically adding the gate accents. | Physical preference is recorded; no separate all-legends readability or productivity result was supplied. |
+| Q-03 · distinct physical responses retained | Can punctuation landmarks coexist with the green field? | Operator Ice was historically liked; Three-Role Split was liked in daylight; Chartreuse Punctuation was neutral and retained. The current unranked inclination is toward the keeper and Rose Backspace. | Keep these context-specific responses separate. No whole-keyboard readability or productivity result was supplied. |
 | Q-13 · combined comparison paused by current preference | Does one white accent group or two differently colored groups work better? | Glacier Union combined white gates and operators. In that combined context white Tab felt out of place; standalone Operator Ice was chosen. Glacier Syntax keeps white gates and blue operators as an untested online preview. | Union was saved/export-verified, trialled and removed from its temporary slot; the prior reference was restored exactly. Do not schedule another hardware trial merely because Syntax is prepared. |
 | Q-02 · needs recipient | Can another owner use a look while preserving their own setup? | Walk through one recipient's fresh same-slot export privately; check supported format before preparing. | Fresh readback preserves unrelated fields; recipient confirms legibility and behavior. Record only generic compatibility findings publicly. |
 | Device tests · needs actual hardware | Do behavior and settings persist across reconnects and work correctly on macOS? | Run USB power-cycle and actual Mac acceptance when those devices are available. | Direct physical and OS observations; file equality and Linux results do not substitute for these tests. |

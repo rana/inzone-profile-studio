@@ -105,7 +105,20 @@ export const FRAME_STUDIES: readonly PaletteStudy[] = [
   },
 ];
 
-/** One complete alternate mood, with role boundaries retained. */
+const solarDraftChanges: Readonly<Record<string, string>> = {
+  ...Object.fromEntries([
+    ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'SPACE', 'MINUS', 'PLUS', 'BACK_SLASH',
+    'SEMICOLON', 'QUOTE', 'COMMA', 'PERIOD', 'SLASH',
+  ].map(key => [key, '#FFB000'])),
+  ...Object.fromEntries(Array.from({ length: 10 }, (_, index) => [`NUM_${index}`, '#FFFFFF'])),
+  BRACKET_LEFT: '#FFFFFF', BRACKET_RIGHT: '#FFFFFF',
+  WIN_L: '#00FF00', FN: '#00FF00',
+  F1: '#4400FF', F2: '#4400FF', F3: '#4400FF', F4: '#4400FF',
+  F5: '#00A0FF', F6: '#00A0FF', F7: '#00A0FF', F8: '#00A0FF',
+  F9: '#00FFFF', F10: '#00FFFF', F11: '#00FFFF', F12: '#00FFFF',
+};
+
+/** Complete alternate moods and bounded refinements, with role groups retained. */
 export const ALTERNATE_STUDIES: readonly PaletteStudy[] = [
   {
     id: 'solar-draft',
@@ -114,17 +127,20 @@ export const ALTERNATE_STUDIES: readonly PaletteStudy[] = [
     baseId: 'amber-hinge-rose',
     summary: 'Amber writing, a white number rail, green Win/Fn and a violet–azure–cyan crown.',
     question: 'Does a warm writing field offer an enjoyable alternate mood while the functional groups remain easy to recognize?',
+    trial: { status: 'revision-requested', note: 'Enjoyable and balanced overall, but the white digits were too prominent; refinement requested. Legend readability was not separately confirmed.' },
+    changes: solarDraftChanges,
+  },
+  {
+    id: 'solar-azure-rail',
+    name: 'Solar Azure Rail',
+    family: 'palette',
+    baseId: 'amber-hinge-rose',
+    summary: 'Solar Draft with ten azure digits; amber writing, white brackets and all other colors stay fixed.',
+    question: 'Does changing only the digits to azure reduce their prominence while preserving useful grouping?',
+    trial: { status: 'liked', note: 'In one physical trial, the amber letters led and the blue digits were readable. Whole-keyboard legend readability was not separately confirmed.' },
     changes: {
-      ...Object.fromEntries([
-        ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'SPACE', 'MINUS', 'PLUS', 'BACK_SLASH',
-        'SEMICOLON', 'QUOTE', 'COMMA', 'PERIOD', 'SLASH',
-      ].map(key => [key, '#FFB000'])),
-      ...Object.fromEntries(Array.from({ length: 10 }, (_, index) => [`NUM_${index}`, '#FFFFFF'])),
-      BRACKET_LEFT: '#FFFFFF', BRACKET_RIGHT: '#FFFFFF',
-      WIN_L: '#00FF00', FN: '#00FF00',
-      F1: '#4400FF', F2: '#4400FF', F3: '#4400FF', F4: '#4400FF',
-      F5: '#00A0FF', F6: '#00A0FF', F7: '#00A0FF', F8: '#00A0FF',
-      F9: '#00FFFF', F10: '#00FFFF', F11: '#00FFFF', F12: '#00FFFF',
+      ...solarDraftChanges,
+      ...Object.fromEntries(Array.from({ length: 10 }, (_, index) => [`NUM_${index}`, '#00A0FF'])),
     },
   },
 ];
